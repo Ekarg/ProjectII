@@ -1,0 +1,18 @@
+/*
+    File: test_main.cpp
+
+    Authors: Grace Coffman, Sidian Wu, Alejandro Vega, Wesley Tang
+            Department of Computer Science
+            Texas A&M University
+			
+    THIS FILE CONTAINS UNIT TESTS FOR CLASS MEMBER FUNCTIONS
+	OF THE CLASS AI. THIS MAIN DOES NOT DO ANYTHING
+	RELEVANT IN TERMS OF THE REVERSI PROJECT. 
+
+*/
+
+#include "ai.h"
+
+int main() {
+	AI _ai;
+}

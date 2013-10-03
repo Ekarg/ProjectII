@@ -46,11 +46,13 @@ public:
 		node where each branch represents a possible move. The depth of the tree generated 
 		can either be constant ( see X moves ahead ) or variable based on the difficulty
 		level of the AI. NOTE: Replaces old tree.
+		
+		Call compare on all the boardstates to see which one is the winning choice (?)
 	*/
 	
 	std::string choose();
 	/*
-		Called only after the tree has been created. Bredth first search through tree
+		Called only after the tree has been created. Breadth first search through tree
 		to determine the choice the AI makes. Each branch contains a gamestate in the
 		form of a string and are compared to each other with the compare() function.
 		Based on difficulty scalar, the AI may choose non-optimal choice. 

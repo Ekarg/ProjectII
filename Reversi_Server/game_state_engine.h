@@ -38,6 +38,10 @@ public:
 
 	Gamestate_Engine();
 	//Default Constructor sets up initial conditions
+	//e.g.
+	//	1.) Two yellow, two black pieces in middle of the board
+	//	....
+	//
 	
 	bool move(std::string square_id);
 	// Returns false if invalid, otherwise update _board to reflect move made
@@ -70,10 +74,12 @@ public:
 	bool is_legal_yellow(std::string square_id);
 	// Returns true if square is a legal move for yellow
 	// autofalse is square is occupied
+	// i.e - checks to see if square is 3 or 5
 	
 	bool is_legal_black(std::string square_id);
 	// Returns true if square is a legal move for black
 	// autofalse is square is occupied
+	// i.e - checks to see if square is 4 or 5
 	
 	void print();
 	// Print _board to console
@@ -81,7 +87,8 @@ public:
 	std::string get_board();
 	// returns string representation of board
 	// i.e. "0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n  0 0 0 0 1 2 0 0 \n" ...etc.
-	// call to get data to send to client 
+	// call to get data to send to client
+	// if a entry is a 3, 4, or 5, a 0 is added to the string instead
 	
 };
 

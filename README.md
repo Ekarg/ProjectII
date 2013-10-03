@@ -10,25 +10,25 @@ Wesley Tang
 Simple Interface Between Client and Server
 - Client 1 sends command to server
 - Server processes command and updates boardstate accordingly
-- *Process Client 2 or AI
+- Process Client 2 or AI
 - Server sends boardstate to Client 1
-- Client 1 updates **GUI
+- Client 1 updates GUI
 - Rinse -> repeat.
 
-	*AI
-		-AI receives boardstate
-		-Tree structure is created
-		-AI search algorithm with applied difficulty mod
-		-AI returns selected move
-	*
-	*Client 2
-		-Server waits for selected move
-		-Timeout if no move is selected reasonably quick
-	*
-	**GUI
-		-I would suggest OpenGL.
-		- Anything but FLTK, really. 
-	**
+AI
+	-AI receives boardstate
+	-Tree structure is created
+	-AI search algorithm with applied difficulty mod
+	-AI returns selected move
+
+Client 2
+	-Server waits for selected move
+	-Timeout if no move is selected reasonably quick
+
+GUI
+	-I would suggest OpenGL.
+	- Anything but FLTK, really. 
+	
 
 Supplement
 	

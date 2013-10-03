@@ -29,8 +29,8 @@ private:
 					z = 25};
 					
 	std::vector<std::vector<State> > _board;
-	std::stack<std::string> played_moves;
-	std::stack<std::string> undid_moves;
+	std::stack<std::string> played_moves; //stack of string representations of previous boards
+	std::stack<std::string> undid_moves; //stack of string representations of boards that have been undone
 	bool player_color;
 	// True = YELLOW; False = BLACK;
 
@@ -88,7 +88,7 @@ public:
 	// returns string representation of board
 	// i.e. "0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n  0 0 0 0 1 2 0 0 \n" ...etc.
 	// call to get data to send to client
-	// if a entry is a 3, 4, or 5, a 0 is added to the string instead
+	// if a entry is a 3, 4, or 5, a 0 is added to the string instead since these values are used to check if a square is legal value
 	
 };
 

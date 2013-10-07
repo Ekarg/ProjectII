@@ -11,10 +11,15 @@
 
 */
 
+#include <iostream>
+
 #include "game_state_engine.h"
 
 int main() {
 	Gamestate_Engine _e = Gamestate_Engine();
 	_e.print();
-
+	std::cout << _e.get_board() << '\n';
+	int a = 4;
+	int b = 5;
+	std::cout << a << b << " is : " << _e.itos_loc(a, b);
 }

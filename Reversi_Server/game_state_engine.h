@@ -22,7 +22,7 @@ const int GRID_SIZE = 8;
 class Gamestate_Engine {
 private:
 
-	enum State { EMPTY = 0, YELLOW = 1, BLACK = 2};
+	enum State { EMPTY = 0, YELLOW = 1, BLACK = 2, LEGAL_YELLOW = 3, LEGAL_BLACK = 4, LEGAL_BOTH = 5};
 	enum columns { a = 0, b = 1, c = 2, d = 3, e = 4, f = 5, g = 6, h = 7, i = 8, 
 					j = 9, k = 10, l = 11, m = 12, n = 13, o = 14, p = 15, q = 16, 
 					r = 17, s = 18, t = 19, u = 20, v = 21, w = 22, x = 23, y = 24, 
@@ -31,6 +31,7 @@ private:
 	std::vector<std::vector<State> > _board;
 	std::stack<std::string> played_moves; //stack of string representations of previous boards
 	std::stack<std::string> undid_moves; //stack of string representations of boards that have been undone
+
 	bool player_color;
 	// True = YELLOW; False = BLACK;
 
@@ -57,7 +58,7 @@ public:
 	// Input square_id is the location of the piece we want to undo
 
 	bool is_play();
-	// Returns false if no more avaiable moves
+	// Returns false if no more available moves
 	
 	bool undo_move();
 	// Returns false on fail, return true on success
@@ -87,8 +88,10 @@ public:
 	std::string get_board();
 	// returns string representation of board
 	// i.e. "0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n  0 0 0 0 1 2 0 0 \n" ...etc.
-	// call to get data to send to client
-	// if a entry is a 3, 4, or 5, a 0 is added to the string instead since these values are used to check if a square is legal value
+	// call to get data to send to client 
+	
+	std::string itos_loc(int x, int y);
+	// converts grid coordinates to string representation
 	
 };
 

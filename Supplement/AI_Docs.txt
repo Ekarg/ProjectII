@@ -1,0 +1,5 @@
+http://tree.phi-sci.com/documentation.html
+http://mnemstudio.org/game-reversi-example-2.htm
+http://www.samsoft.org.uk/reversi/strategy.htm
+http://www.geekyblogger.com/2007/03/artificial-intelligence-in.html
+http://www.site-constructor.com/othello/

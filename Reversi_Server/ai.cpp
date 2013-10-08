@@ -8,6 +8,7 @@
     WRITE SHIT ABOUT AI HERE
 
 */
+#include <stdio.h>
 
 #include "ai.h"
 

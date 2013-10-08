@@ -14,6 +14,7 @@
 #ifndef _Game_Server_
 #define _Game_Server_
 
+#include "global_const.h"
 #include "game_state_engine.h"
 #include "ai.h"
 

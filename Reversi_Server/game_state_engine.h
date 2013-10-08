@@ -17,7 +17,7 @@
 #include <stack>
 #include <string>
 
-const int GRID_SIZE = 8;
+#include "global_const.h"
 
 class Gamestate_Engine {
 private:

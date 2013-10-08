@@ -17,7 +17,7 @@
 #include <sstream>
 #include "tree.hh"
 
-const int GRID_SIZE = 8;
+#include "global_const.h"
 
 class AI {
 private:

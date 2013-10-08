@@ -93,6 +93,10 @@ public:
 	std::string itos_loc(int x, int y);
 	// converts grid coordinates to string representation
 	
+	void stoi_loc(std::string s, int &x, int &y);
+	// viceversa of itos_loc();
+	
+	
 };
 
 #endif

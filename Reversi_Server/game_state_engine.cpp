@@ -32,6 +32,9 @@ Gamestate_Engine::Gamestate_Engine() {
 	_board[GRID_SIZE/2]     [d] = YELLOW;
 	_board[(GRID_SIZE/2)-1] [d] = BLACK;
 	_board[(GRID_SIZE/2)-1] [e] = YELLOW;
+	
+	//TEST CASE
+	//_board[0] [h] = YELLOW;
 }
 	
 bool Gamestate_Engine::move(std::string square_id) {
@@ -66,13 +69,23 @@ bool Gamestate_Engine::redo_move() {
 }
 
 bool Gamestate_Engine::is_legal_yellow(std::string square_id) {
-	//do work
-	return true;
+	int x, y;
+	stoi_loc(square_id, x, y);
+	//std::cout << _board[x][y];
+	if ( (_board[x][y] == LEGAL_YELLOW) || (_board[x][y] == LEGAL_BOTH) ) {
+		return true;
+	}
+	return false;
 }
 
 bool Gamestate_Engine::is_legal_black(std::string square_id) {
-	//do work
-	return true;
+	int x, y;
+	stoi_loc(square_id, x, y);
+	//std::cout << _board[x][y];
+	if ( (_board[x][y] == LEGAL_BLACK) || (_board[x][y] == LEGAL_BOTH) ) {
+		return true;
+	}
+	return false;
 }
 
 void Gamestate_Engine::print() {
@@ -122,7 +135,7 @@ std::string Gamestate_Engine::get_board() {
 std::string Gamestate_Engine::itos_loc(int x, int y) {
 	std::string s = "";
 	if ( (x >= GRID_SIZE) || (y >= GRID_SIZE) ) {
-		printf("ERROR : itos_loc(x, y) | x || y >= GRID_SIZE\n");
+		printf("ERROR : itos_loc(x, y) | x || y >= GRID_SIZE;\n");
 		return s;
 	}
 	std::stringstream ss;
@@ -134,6 +147,22 @@ std::string Gamestate_Engine::itos_loc(int x, int y) {
 	return s;
 }
 
+void Gamestate_Engine::stoi_loc(std::string s, int &x, int &y) {
+	if (s.size() != 2) {
+		printf("ERROR : stoi_loc(s, x, y) | s.size() != 2;\n");
+		return;
+	}
+	std::string s_2 = "";
+	s_2 += s[1];		// s_2 = y;
+	s.erase(s.end()-1); // s = x;
+	x = atoi(s.c_str());
+	//Quick and dirty: Never ever ever ever do this.
+	y = ((int)s_2[0]) - 97;
+	//Quick and dirty: Never ever ever ever do this.
+	if ( (x < 0) || (y < 0) || (x >= GRID_SIZE) || (y >= GRID_SIZE) ) {
+		printf("ERROR : stoi_loc(s, x, y) | x and/or y out of bounds;\n");
+	}
+}
 
 
 

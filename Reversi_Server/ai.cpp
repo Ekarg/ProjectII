@@ -11,6 +11,29 @@
 
 #include "ai.h"
 
+class AI::Board_state {
+private:
+	std::vector<std::vector<int> > board;
+	int num_black;
+	int num_yellow;
+public:
+	Board_state(std::string s): num_yellow(0), num_black(0) {
+		std::stringstream ss;
+		ss << s;
+		board.resize(GRID_SIZE);
+		for (int i = 0; i < GRID_SIZE; ++i) {
+			board[i].resize(GRID_SIZE);
+			for (int j = 0; j < GRID_SIZE; ++j) {
+				std::string t;
+				ss >> t;
+				board[i][j] = atoi(t.c_str());
+				std::cout << board[i][j];
+			}
+			std::cout << '\n';
+		}
+	}
+};
+
 
 unsigned int AI::compare(std::string a, std::string b) {
 	//do work
@@ -18,6 +41,7 @@ unsigned int AI::compare(std::string a, std::string b) {
 }
 
 void AI::create_tree(std::string state) {
+	Board_state b = Board_state(state); //TESTING
 	//do work
 	return;
 }

@@ -12,16 +12,19 @@
 #ifndef _AI_
 #define _AI_
 
-#include <map>
 #include <string>
+#include <iostream>
+#include <sstream>
+#include "tree.hh"
+
+const int GRID_SIZE = 8;
 
 class AI {
 private:
-	//std::map<std::string> _tree;
-	//map or tree.hh variant to implement a tree structure (or we can write our own)
-	
 	enum Color { YELLOW = 1, BLACK = 2};
+	class Board_state;
 	
+	tree<std::string> _tree;
 	Color color;
 	unsigned int difficulty; 
 	// difficulty is a scalar which we use to adjust allotted search time

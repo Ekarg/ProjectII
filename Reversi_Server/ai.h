@@ -37,6 +37,8 @@ public:
 	AI(): difficulty(0), color(BLACK) {}
 	AI(unsigned int i): difficulty(0), color((Color)i) {}
 	
+	void out_diff(){ std::cout << difficulty;} // test function outputs ai difficulty 
+	void out_color(){std::cout << color;} // test function outputs ai color 
 	unsigned int compare(std::string a, std::string b);
 	// compares two boardstates and decides which is "winning"
 	// return 0 for equal
@@ -63,6 +65,8 @@ public:
 	void set_difficulty(unsigned int i);
 	// Manually sets AI difficulty
 	
+	void set_ai_color(std::string ai_color);
+	//sets AI color 
 	
 };
 

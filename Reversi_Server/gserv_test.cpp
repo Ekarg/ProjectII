@@ -15,4 +15,6 @@
 
 int main() {
 	Game_Server _s = Game_Server();
+	_s.parse_cmd("DISPLAY");
+	
 }

@@ -36,7 +36,7 @@ private:
 	// True = YELLOW; False = BLACK;
 
 public:
-
+	
 	Gamestate_Engine();
 	//Default Constructor sets up initial conditions
 	//e.g.
@@ -95,6 +95,9 @@ public:
 	
 	void stoi_loc(std::string s, int &x, int &y);
 	// viceversa of itos_loc();
+	
+	void set_color(std::string color);
+	//sets player color
 	
 	
 };

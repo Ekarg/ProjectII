@@ -60,6 +60,21 @@ void AI::set_difficulty(unsigned int i) {
 	difficulty = i;
 }
 
+void AI::set_ai_color(std::string ai_color)
+{
+	if(ai_color == "BLACK")
+	{
+		color = BLACK;
+	
+	}
+	if(ai_color == "YELLOW")
+	{
+		color = YELLOW;
+		
+	}
+
+}
+
 
 
 

@@ -16,4 +16,9 @@
 int main() {
 	AI _ai;
 	_ai.create_tree("0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n ");
+	_ai.set_difficulty(10);
+	_ai.set_ai_color("BLACK");
+	_ai.out_diff();
+	_ai.out_color();
+	
 }

@@ -62,6 +62,9 @@ public:
 	// AI-AI - Handled by setting up AI and treating other AI as client
 	// 		- ?????????? Maybe ????????
 	
+	void parse_move(std::string move);
+	//parse the users move to check validity 
+	
 	void reply(int i);
 	// Given an int, replies with cooresponding message
 	// as well as gamestate update. 

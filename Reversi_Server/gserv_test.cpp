@@ -14,7 +14,20 @@
 #include "game_server.h"
 
 int main() {
-	Game_Server _s = Game_Server();
-	_s.parse_cmd("DISPLAY");
 	
+	
+	Game_Server _s = Game_Server();
+	std::string query = "";
+	bool run = true;
+	std::cout << "Welcome" << "\t\t\t ;chose side (YELLOW/BLACK)" <<std::endl; 
+	while(run)
+	{
+		std::cin >> query; 
+		if(query == "EXIT")
+		{
+			run = false;
+		}
+		 _s.parse_cmd(query);
+	}
+	return 0;
 }

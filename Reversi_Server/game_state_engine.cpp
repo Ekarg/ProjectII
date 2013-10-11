@@ -166,18 +166,14 @@ void Gamestate_Engine::stoi_loc(std::string s, int &x, int &y) {
 
 void Gamestate_Engine::set_color(std::string color)
 {
-	if(color == "YELLOW");
+	if(color == "YELLOW")
 	{	
 		player_color = true;
 	}
-	
 	if(color == "BLACK")
 	{
 		player_color = false;
-	
 	}
-
-
 }
 
 

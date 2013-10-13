@@ -65,7 +65,7 @@ public:
 	void parse_move(std::string move);
 	//parse the users move to check validity 
 	
-	void reply(int i);
+	std::string reply(int i);
 	// Given an int, replies with cooresponding message
 	// as well as gamestate update. 
 	

@@ -18,7 +18,7 @@
 
 CC=g++
 
-all: gse_test gai_test gserv_test
+all: gse_test gai_test gserv_test main
 
 game_state_engine.o: game_state_engine.h game_state_engine.cpp
 	$(CC) -c -g game_state_engine.cpp
@@ -38,9 +38,13 @@ game_server.o: game_server.h game_server.cpp
 gserv_test: gserv_test.cpp game_server.o ai.o game_state_engine.o
 	$(CC) -o gserv_test gserv_test.cpp game_server.o ai.o game_state_engine.o
 
+main: main.cpp game_server.o game_state_engine.o ai.o 
+	$(CC) -o main main.cpp game_server.o game_state_engine.o ai.o -lsocket -lnsl
+	
 clean:
 	/bin/rm -rf *.o gse_test
 	/bin/rm -rf *.o gserv_test
 	/bin/rm -rf *.o gai_test
+	/bin/rm -rf *.o main	
 	
 	

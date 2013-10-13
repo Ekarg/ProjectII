@@ -103,13 +103,17 @@ unsigned int Game_Server::parse_cmd(std::string s){
 	
 	else 
 	{
-		std::cout << "Invalid query, please try again" << std::endl;
-	}
 		return 0;
+	}
+		return 1;
 }
 
-void Game_Server::reply(int i) {
-	//do work
+std::string Game_Server::reply(int i) {
+	if( i == 0)
+		return "ILLEGAL COMMAND\n";
+	if(i == 1)
+		return "OK\n";
+	return "\n";
 }
 
 void Game_Server::exit() {

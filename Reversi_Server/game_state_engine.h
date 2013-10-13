@@ -97,10 +97,7 @@ public:
 	// viceversa of itos_loc();
 	
 	void set_color(std::string color);
-	//sets player's color
-	
-	int get_color();
-	//gets player's color
+	//sets player color
 	
 	
 };

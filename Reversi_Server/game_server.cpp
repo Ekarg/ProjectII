@@ -38,43 +38,23 @@ void Game_Server::run() {
 void Game_Server::parse_move(std::string move)
 {
  //Lazy man's parser, checks first char in string if valid checks second char in string from the pool of all possible moves, else invalid move
-	
-	bool check_legal; // true == legal move, false == illegal move
 	if (move[0] == 'a' || move[0] == 'b' || move[0] == 'c' || move[0] == 'd' || move[0] == 'e' || move[0] == 'f' || move[0] == 'g' || move[0] == 'h')
 	{
 		if(move[1] == '1'|| move[1] == '2' || move[1] == '2' || move[1] == '3' || move[1] == '4' || move[1] == '5' || move[1] == '6'|| move[1] == '7')
 		{
-			if(_e.get_color() == 0)
-			{
-				if(check_legal = _e.is_legal_black(move) == true)
-				{
-					std::cout << "Enter Move" << std::endl; //allowed to enter a new move
-				}
-				else
-				{
-					std::cout << "ILLEGAL MOVE" << std::endl;
-				}
-			}
-			if(_e.get_color() == 1)
-			{
-				if(check_legal = _e.is_legal_yellow(move) == true)
-				{
-					std::cout << "Enter Move" << std::endl; //allowed to enter a new move
-				}
-				else
-				{
-					std::cout << "ILLEGAL MOVE" << std::endl;
-				}
-			}
+			std::cout << "Enter Move" << std::endl;
+			//once here needs to check if move is legal 
 		}
+		
 		else 
 		{
-			std::cout << "Invalid Move, please try again" << std::endl; //first char is correct but second is not 
+			std::cout << "Invalid Move, please try again" << std::endl;
 		}
 	}
+	
 	else 
 	{
-		std::cout << "Invalid Move, please try again" << std::endl; //not a correct move at all 
+		std::cout << "Invalid Move, please try again" << std::endl;
 	}
 }
 
@@ -85,7 +65,7 @@ unsigned int Game_Server::parse_cmd(std::string s){
 	else if(s == "YELLOW" && !colorSet) {colorSet = true; std::cout << "OK \t\t\t ;choose game mode"<< std::endl; _e.set_color("YELLOW"); _ai.set_ai_color("BLACK");} 
 	
 	//STEP 2) set game type, AI_Set is a restriction if the user tries to enter a gametype query again or not set colors skip this statement  
-	else if(s == "AI-AI" && colorSet && !AI_Set) { AI_Set = true; std::cout << "OK \t\t\t ;set AI difficulty"<< std::endl;}
+	else if(s == "AI-AI" && colorSet && !AI_Set) { AI_Set = true; std::cout << "OK \t\t\t ;set AI set AI difficulty"<< std::endl;}
 	else if(s == "HUMAN-AI" && colorSet && !AI_Set) {AI_Set = true; std::cout << "OK \t\t\t ;set AI difficulty"<< std::endl;}
 	
 	//STEP 3) set difficulty, AI_diff_set is a restriction if the user tries to enter a diff. again or has not entered color or game type skip this statement  
@@ -105,7 +85,9 @@ unsigned int Game_Server::parse_cmd(std::string s){
 	{
 		std::cout << "Invalid query, please try again" << std::endl;
 	}
-		return 0;
+	
+	
+	return 0;
 }
 
 void Game_Server::reply(int i) {

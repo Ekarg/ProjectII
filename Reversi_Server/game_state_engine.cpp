@@ -176,10 +176,6 @@ void Gamestate_Engine::set_color(std::string color)
 	}
 }
 
-int Gamestate_Engine::get_color() 
-{
-	return player_color;
-}
 
 
 

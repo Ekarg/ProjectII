@@ -49,10 +49,12 @@ bool Gamestate_Engine::move(std::string square_id) {
 	
 	vector<Position>check; 
 	vector<Position>first;
+	vector<Position>diagonals;
 	int row;
-	int colum
+	int colum;
 	int change = 0;
 	int checkcolor=0;
+	int change = 0; 
 	bool valid =  false; 
 	bool vertical = false; 
 	bool diagonal = false; 
@@ -129,6 +131,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 									printf("valid move");
 									horizontal = true; 
 									change = s; 
+									break; 
 									}
 								}
 								if(colum>change)
@@ -163,6 +166,8 @@ bool Gamestate_Engine::move(std::string square_id) {
 									{
 									printf("valid move"); 
 									vertical = true; 
+									change = f; 
+									break; 
 									}
 								}
 								if(row>change)
@@ -191,6 +196,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 							{
 								if(rows == row-1 && colums == colum-1)
 								{
+								diagonals.push_back(Position(rows,colums,_board[rows][colums]));
 								int d = colum-2; // going current position left 
 								
 									for(int y = row-2; y <= 0; y--) // going current position up 
@@ -201,14 +207,32 @@ bool Gamestate_Engine::move(std::string square_id) {
 										{
 										printf("valid");
 										diagonal = true; 
+										break; 
 										}
+										diagonals.push_back(Position(y,d,_board[y][d]));
 										d--;
+									}
+									if(diagonal = true)
+									{
+										for(int i = 0; i< diagonals.size(); i++)
+										{
+											int r = diagonals[i].getRow(); 
+											int c =diagonals[i].getColum();
+											_board[r].at(c)=playernum;
+
+										}
+									diagonals.clear();
+									}
+									else
+									{
+									diagonals.clear(); 
 									}
 								}
 								else printf("no diagonal"); 
-								
+							//-----------------upper right diagonal--------------	
 								if(rows == row-1 && colums == colum+1)
 								{
+									diagonals.push_back(Position(rows,colums,_board[rows][colums]));
 									int j = colum+2; 
 									for (int b=m-2; b<= 0; b--)
 									{
@@ -216,16 +240,34 @@ bool Gamestate_Engine::move(std::string square_id) {
 									
 										if(_board[b][j]==playernum)
 										{	
-										diagonal= true; 
+										diagonal= true;
+										break; 
 										}
+									diagonals.push_back(Position(b,j,_board[b][j]));
 									j++;
 									}
 								
+								if(diagonal=true)
+								{
+									for(int i = 0; i< diagonals.size(); i++)
+									{
+										int r = diagonals[i].getRow(); 
+										int c =diagonals[i].getColum();
+										_board[r].at(c)=playernum;
+
+									}
+								diagonals.clear();
+								}
+								else
+								{
+								diagonals.clear();
+								}
 								}
 								else printf("no diagonal");
-								
+					//----------------lower left diagonal -------------------	
 								if(rows == row+1 && colums == colum-1)
 								{
+								diagonals.push_back(Position(rows,colums,_board[rows][colums]));
 									int l = colum-2;
 									for(int c = m+2; c < 8; c++)
 									{
@@ -237,15 +279,34 @@ bool Gamestate_Engine::move(std::string square_id) {
 									if(_board[c][l]==playernum)
 										{
 										printf("valid");
-										diagonal=true; 
+										diagonal=true;
+										break; 
 										}
+									diagonals.push_back(Position(c,l,_board[c][l]));
 									l--;
 									}
+									if(diagonal = true)
+									{
+										for(int i = 0; i< diagonals.size(); i++)
+										{
+											int r= diagonals[i].getRow(); 
+											int c =diagonals[i].getColum();
+											_board[r].at(c)=playernum;
+
+										}
+								diagonals.clear();
+									}
+									else
+									{
+									diagonals.clear(); 
+									}
+									
 								}
 								else printf("no diagonal");
-								
+						//-----------lower right diagonal---------------------------		
 								if(rows ==m+1 && colums ==g+1)
 								{
+								diagonals.push_back(Position(rows,colums,_board[rows][colums])); 
 								int x= colum+2; 
 
 								for(int c = row+2; c < 8; c++)
@@ -258,20 +319,40 @@ bool Gamestate_Engine::move(std::string square_id) {
 								if(_board[c][x]==playernum)
 									{
 									printf("valid");
-									diagonal = true; 
+									diagonal = true;
+									break; 
 									}
+								diagonals.push_back(Position(c,x,_board[c][x]));
 								x++;
 								}
+								
+									if(diagonal = true)
+									{
+										for(int i = 0; i< diagonals.size(); i++)
+										{
+											int r = diagonals[i].getRow(); 
+											int c =diagonals[i].getColum();
+											_board[r].at(c)=playernum;
+
+										}
+								diagonals.clear();
+									}
+									else
+									{
+									diagonals.clear();
+									}
 								}
 								else printf("no diagonal");
 								
 							}
 							else printf("no diagonal");
-							
+						//------------------upper left and upper right------------	
 							if(row == 0)
 							{
+							//----------left---------------------
 								if(rows == row+1 && colums == colum+1)
 								{
+									diagonals.push_back(Position(rows, colums, _board[rows][colums])); 
 									int p = colum+2; 
 									for(int v = row+2; v < 8; v++)
 									{
@@ -280,24 +361,67 @@ bool Gamestate_Engine::move(std::string square_id) {
 											{
 											printf("valid")
 											diagonal = true; 
+											break;
 											}
+											diagonals.push_back(Position(v,p,_board[v][p]));
 											p++;
 										
 									}
+									
+									if(diagonal= true)
+									{
+											for(int i = 0; i< diagonals.size(); i++)
+											{
+												int r = diagonals[i].getRow(); 
+												int c =diagonals[i].getColum();
+												_board[r].at(c)=playernum;
+
+											}
+									diagonals.clear();
+									}
+
+									else
+									{
+									diagonals.clear(); 
+									}
 								}
 								else printf("no diagonal");
-								
+								//----------- right-----------------
 								if(rows == row+1 && colums == colum-1)
 								{
+									diagonals.push_back(Position(rows,colums,_board[rows][colums]));
 									int n = colum-2; 
 									for(int v = m+2; v < 8; v++)
 									{
+											if(v==8||n<0)
+											{
+											break;
+											}
 										if(_board[v][n]==playernum)
 										{
 										printf("valid"); 
-										diagonal = true; 
+										diagonal = true;
+										break; 
 										}
+										diagonals.push_back(Position(v,n,_board[v][n])); 
 									 n--; 
+									}
+									
+									if(diagonal= true)
+									{
+											for(int i = 0; i< diagonals.size(); i++)
+											{
+												int r = diagonals[i].getRow(); 
+												int c =diagonals[i].getColum();
+												_board[r].at(c)=playernum;
+
+											}
+									diagonals.clear();
+									}
+
+									else
+									{
+									diagonals.clear(); 
 									}
 								
 								}

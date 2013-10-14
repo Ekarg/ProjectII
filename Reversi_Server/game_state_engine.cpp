@@ -47,15 +47,17 @@ bool Gamestate_Engine::move(std::string square_id) {
 	// Input square_id is the chosen destination for moved piece 
 	// Check is_play(); if false, game-over
 	
-	int checkcolor=0;
-	int row;
-	int colum
 	vector<Position>check; 
 	vector<Position>first;
+	int row;
+	int colum
+	int change = 0;
+	int checkcolor=0;
 	bool valid =  false; 
 	bool vertical = false; 
 	bool diagonal = false; 
 	bool horizontal = false ;
+	bool final = false; 
 	//parse the command? 
 	//square_id parse depending on which one i  the a or b 
 	
@@ -126,11 +128,27 @@ bool Gamestate_Engine::move(std::string square_id) {
 									{
 									printf("valid move");
 									horizontal = true; 
-									
-									
+									change = s; 
+									}
+								}
+								if(colum>change)
+								{
+
+									for(int t = colum; t>change; t-- )
+									{
+									_board[row].at(t)=playernum;
+									}
+								}
+
+								if(colum<change)
+								{
+									for(int t = colum; t<change; t++ )
+									{
+									_board[row].at(t)=playernum;
 									}
 								
-								}
+								}	
+								
 							}
 							else
 							{
@@ -141,10 +159,25 @@ bool Gamestate_Engine::move(std::string square_id) {
 							{
 								for(int f = 0; f < _board.size(); f++)
 								{
-									if(grid[f][g]==player && m !=f)
+									if(_board[f][g]==playernum && m !=f)
 									{
 									printf("valid move"); 
 									vertical = true; 
+									}
+								}
+								if(row>change)
+								{
+									for(int q=row; q>change; q--)
+									{
+										_board[q].at(colum)=player;
+									}
+								}
+
+								if(row<change)
+								{
+									for(int q = row; q<= change; q++)
+									{
+									_board[q].at(colum)=playernum;
 									}
 								}
 							}
@@ -271,36 +304,32 @@ bool Gamestate_Engine::move(std::string square_id) {
 								else printf("no diagonal");
 							
 							}
-
+								if(diagonal == true || vertical == true || horizontal == true)
+								{
+								printf("legal move");
+								final = true; 
+								}
+						
 						}
 						
 												
-						if(diagonal == true || vertical == true || horizontal == true)
-						{
-						printf("legal move");
-						return true; 
-						}
-						else
-						{
-						printf("invalid"); 
-						return false;
-						}
+
 				}
 				
 				else 
 				{
 				printf("invalid move");
-				return false; 
+				 final = false; 
 				}
  }
  else
  {
 printf("ERROR : spot %i %i is already taken ",row,colum);
-return false; 
+final = false; 
  }
  
 	
-	//return true;
+	return final;
 }
 
 bool Gamestate_Engine::unmove(std::string square_id) {

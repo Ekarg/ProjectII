@@ -17,7 +17,9 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
+#include<vector>
 
+#include "Position.h"
 #include "game_state_engine.h"
 
 Gamestate_Engine::Gamestate_Engine() {
@@ -39,7 +41,266 @@ Gamestate_Engine::Gamestate_Engine() {
 	
 bool Gamestate_Engine::move(std::string square_id) {
 	//do work
-	return true;
+	// Returns false if invalid, otherwise update _board to reflect move made
+	// Simplistic parsing of two character move command should be done here
+	// Insert move to played_moves for use with undo/redo
+	// Input square_id is the chosen destination for moved piece 
+	// Check is_play(); if false, game-over
+	
+	int checkcolor=0;
+	int row;
+	int colum
+	vector<Position>check; 
+	vector<Position>first;
+	bool valid =  false; 
+	bool vertical = false; 
+	bool diagonal = false; 
+	bool horizontal = false ;
+	//parse the command? 
+	//square_id parse depending on which one i  the a or b 
+	
+	bool player = get_color();
+	int playernum;
+	
+	if(player == true)
+	{
+	playernum = YELLOW ; // player is YELLOW
+	checkcolor = BLACK;
+	}
+	if(player == false)
+	{
+	playernum == BLACK; 
+	checkcolor = YELLOW;
+	}
+
+//________________________________________________
+ // pasrsed string_id  the number is in row the letter is in colum
+    stoi_loc(square_id,row, colum); 
+//______________________________________________
+ 
+ // check if it spot is not already taken 
+ if(_board[row].at(colum)==0)
+ {
+ //first test is there another color beside this position 
+ // look and see if there is another color besides yours around you; 
+// there gots to be a color oposite to yours besides you 
+		check.push_back(Position(row,colum,_board[row].at(colum-1)));
+		check.push_back(Position(row,colum+1,_board[row].at(colum+1)));
+		check.push_back(Position(row-1,colum-1,_board[row-1].at(colum-1)));
+		check.push_back(Position(row-1,colum+1,_board[row-1].at(colum+1)));
+		check.push_back(Position(row-1,colum,_board[row-1].at(colum)));
+		check.push_back(Position(row+1,colum-1,_board[row+1].at(colum-1)));
+		check.push_back(Position(row+1,colum+1,_board[row+1].at(colum+1)));
+		check.push_back(Position(row+1,colum,_board[row+1].at(colum)));
+
+//go through to see if it can find an opposite color 		
+	for(int w = 0; w < check.size(); w++)
+	{
+	int k = check[w].getValue(); 
+				if(k==checkcolor)// depending on the player the 2 can be a 1 or 2? 
+				{
+					cout<<"there is an opposite color besides you"<<endl; 
+					cout<<Checkcolor<<endl; 
+					valid = true; 
+					first.push_back(check[w]); 
+
+				}
+	}
+    
+	check.clear();
+				if(valid == true)
+				{
+				//_board[row].at(colum)=playernum;
+
+
+						for(int u = 0; u < first.size(); u++)
+						{
+						int rows = first[u].getRow();
+						int colums = first[u].getColum(); 
+						//check if there is a horizontal
+							if(row==rows)
+							{
+								for(int s = 0; _board[row].size(); s++)
+								{
+									if(_board[row][s] == playernum && s != colum)
+									{
+									printf("valid move");
+									horizontal = true; 
+									
+									
+									}
+								
+								}
+							}
+							else
+							{
+							printf("no Horizontal");
+							}
+						// check if there is a vertical	
+							if(colum == colums)
+							{
+								for(int f = 0; f < _board.size(); f++)
+								{
+									if(grid[f][g]==player && m !=f)
+									{
+									printf("valid move"); 
+									vertical = true; 
+									}
+								}
+							}
+							else
+							{
+							printf("no Vertical");
+							}
+				
+				// diagonal
+							if(row != 0) // if the slot is not at the top
+							{
+								if(rows == row-1 && colums == colum-1)
+								{
+								int d = colum-2; // going current position left 
+								
+									for(int y = row-2; y <= 0; y--) // going current position up 
+									{
+										if(d<0 || y<0) break;
+										
+										if(_board[y][d] == playernum)
+										{
+										printf("valid");
+										diagonal = true; 
+										}
+										d--;
+									}
+								}
+								else printf("no diagonal"); 
+								
+								if(rows == row-1 && colums == colum+1)
+								{
+									int j = colum+2; 
+									for (int b=m-2; b<= 0; b--)
+									{
+										if(j==8||b<0) break; 
+									
+										if(_board[b][j]==playernum)
+										{	
+										diagonal= true; 
+										}
+									j++;
+									}
+								
+								}
+								else printf("no diagonal");
+								
+								if(rows == row+1 && colums == colum-1)
+								{
+									int l = colum-2;
+									for(int c = m+2; c < 8; c++)
+									{
+
+										if(c==8||l<0)
+										{
+											break;
+										}
+									if(_board[c][l]==playernum)
+										{
+										printf("valid");
+										diagonal=true; 
+										}
+									l--;
+									}
+								}
+								else printf("no diagonal");
+								
+								if(rows ==m+1 && colums ==g+1)
+								{
+								int x= colum+2; 
+
+								for(int c = row+2; c < 8; c++)
+								{
+								if(x==8||c==8)
+								{
+								break; 
+								}
+
+								if(_board[c][x]==playernum)
+									{
+									printf("valid");
+									diagonal = true; 
+									}
+								x++;
+								}
+								}
+								else printf("no diagonal");
+								
+							}
+							else printf("no diagonal");
+							
+							if(row == 0)
+							{
+								if(rows == row+1 && colums == colum+1)
+								{
+									int p = colum+2; 
+									for(int v = row+2; v < 8; v++)
+									{
+										if(p>8) break;
+											if(_board[v][p]==playernum)
+											{
+											printf("valid")
+											diagonal = true; 
+											}
+											p++;
+										
+									}
+								}
+								else printf("no diagonal");
+								
+								if(rows == row+1 && colums == colum-1)
+								{
+									int n = colum-2; 
+									for(int v = m+2; v < 8; v++)
+									{
+										if(_board[v][n]==playernum)
+										{
+										printf("valid"); 
+										diagonal = true; 
+										}
+									 n--; 
+									}
+								
+								}
+								else printf("no diagonal");
+							
+							}
+
+						}
+						
+												
+						if(diagonal == true || vertical == true || horizontal == true)
+						{
+						printf("legal move");
+						return true; 
+						}
+						else
+						{
+						printf("invalid"); 
+						return false;
+						}
+				}
+				
+				else 
+				{
+				printf("invalid move");
+				return false; 
+				}
+ }
+ else
+ {
+printf("ERROR : spot %i %i is already taken ",row,colum);
+return false; 
+ }
+ 
+	
+	//return true;
 }
 
 bool Gamestate_Engine::unmove(std::string square_id) {

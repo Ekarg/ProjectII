@@ -82,7 +82,7 @@ public:
 	// autofalse is square is occupied
 	// i.e - checks to see if square is 4 or 5
 	
-	void print();
+	std::string print();
 	// Print _board to console
 	
 	std::string get_board();

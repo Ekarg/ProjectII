@@ -62,7 +62,7 @@ public:
 	// AI-AI - Handled by setting up AI and treating other AI as client
 	// 		- ?????????? Maybe ????????
 	
-	void parse_move(std::string move);
+	int parse_move(std::string move);
 	//parse the users move to check validity 
 	
 	std::string reply(int i);

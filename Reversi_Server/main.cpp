@@ -1,4 +1,5 @@
 #include "game_server.h"
+#include "global_const.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +9,8 @@
 #include <netinet/in.h>
 int main() {
 	Game_Server server = Game_Server();
-	int port = 4001;
+	int port = PORT;
+	std::cout<<"Connecting on port ... "<<port<<std::endl;
 	int sockID;
 	 socklen_t clilen;
      char buffer[256];
@@ -27,6 +29,7 @@ int main() {
         printf("Error while binding");
 		return false;
 	}
+	std::cout<<"Connected ... Time to play!\n";
     if(listen(sockID, 1) < 0) {
 		printf("Error while listening");
 		return false;
@@ -37,24 +40,29 @@ int main() {
 		printf("Error sending.\n");
 		return false;	
 	}
-	char * buf = new char[500];
 	while(true) {
+		char * buf = new char[500];
 		int length = recv(connectID, buf, 500, 0);
 		if(length < 0) {
 			printf("Error receiving message.\n");
+			delete buf;
 			break;
 		}
 		if(length > 0) {
-			std::string message = std::string(buf);
+			std::string message = std::string(buf, length);
 			int response_num = server.parse_cmd(message);
 			std::string response = server.reply(response_num);
 			if( send(connectID, response.c_str(), response.length(), 0) < 0){
 				printf("Error sending.\n");
+				delete buf;
 				break;		
 			} 
-			if(message.find("EXIT") != std::string::npos) 
+			if(message.find("EXIT") != std::string::npos) {
+				delete buf;
 				break;
+			}
 		}
+		delete buf;
 	}	
 	if( shutdown(connectID, 2) < 0)  {
 		printf("Error shutting down connection.\n");

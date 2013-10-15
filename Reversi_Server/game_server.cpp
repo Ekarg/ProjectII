@@ -35,71 +35,82 @@ void Game_Server::run() {
 	//do work
 }
 
-void Game_Server::parse_move(std::string move)
+int Game_Server::parse_move(std::string move)
 {
  //Lazy man's parser, checks first char in string if valid checks second char in string from the pool of all possible moves, else invalid move
 	
 	bool check_legal; // true == legal move, false == illegal move
-	if (move[0] == 'a' || move[0] == 'b' || move[0] == 'c' || move[0] == 'd' || move[0] == 'e' || move[0] == 'f' || move[0] == 'g' || move[0] == 'h')
+	if (move[1] == 'a' || move[1] == 'b' || move[1] == 'c' || move[1] == 'd' || move[1] == 'e' || move[1] == 'f' || move[1] == 'g' || move[1] == 'h')
 	{
-		if(move[1] == '1'|| move[1] == '2' || move[1] == '2' || move[1] == '3' || move[1] == '4' || move[1] == '5' || move[1] == '6'|| move[1] == '7')
+		if(move[0] == '1'|| move[0] == '2' || move[0] == '2' || move[0] == '3' || move[0] == '4' || move[0] == '5' || move[0] == '6'|| move[0] == '7')
 		{
 			if(_e.get_color() == 0)
 			{
 				if(check_legal = _e.is_legal_black(move) == true)
 				{
-					std::cout << "Enter Move" << std::endl; //allowed to enter a new move
+					_e.move(move);
+					return 3;
 				}
 				else
 				{
-					std::cout << "ILLEGAL MOVE" << std::endl;
+					return 0;
 				}
 			}
 			if(_e.get_color() == 1)
 			{
 				if(check_legal = _e.is_legal_yellow(move) == true)
 				{
-					std::cout << "Enter Move" << std::endl; //allowed to enter a new move
+					_e.move(move);
+					return 3;
 				}
 				else
 				{
-					std::cout << "ILLEGAL MOVE" << std::endl;
+					return 0;
 				}
 			}
 		}
 		else 
 		{
-			std::cout << "Invalid Move, please try again" << std::endl; //first char is correct but second is not 
+			return 0; 
 		}
 	}
 	else 
 	{
-		std::cout << "Invalid Move, please try again" << std::endl; //not a correct move at all 
+		return 0; 
 	}
 }
 
 unsigned int Game_Server::parse_cmd(std::string s){
-
+	if(s.length() < 3)
+		return 0;
+	std::cout<<"Passed here\n";
+	s.erase(s.end()-2, s.end());
+	for(int i=0; i<s.length(); i++)
+	{
+		char c = s.at(i);
+		std::cout<<(int)c<<std::endl;
+	}
+	std::cout<<s<<std::endl;
 	//STEP 1) set HUMAN and AI color, colorSet is a restriction if the user tries to enter a color query again we skip this statement 
-	if(s == "BLACK" && !colorSet) {colorSet = true; std::cout << "OK \t\t\t ;choose game mode"<< std::endl; _e.set_color("BLACK"); _ai.set_ai_color("YELLOW");} 
-	else if(s == "YELLOW" && !colorSet) {colorSet = true; std::cout << "OK \t\t\t ;choose game mode"<< std::endl; _e.set_color("YELLOW"); _ai.set_ai_color("BLACK");} 
+	if(s == "BLACK" && !colorSet) {colorSet = true; _e.set_color("BLACK"); _ai.set_ai_color("YELLOW");} 
+	else if(s == "YELLOW" && !colorSet) {colorSet = true; _e.set_color("YELLOW"); _ai.set_ai_color("BLACK");} 
 	
 	//STEP 2) set game type, AI_Set is a restriction if the user tries to enter a gametype query again or not set colors skip this statement  
-	else if(s == "AI-AI" && colorSet && !AI_Set) { AI_Set = true; std::cout << "OK \t\t\t ;set AI difficulty"<< std::endl;}
-	else if(s == "HUMAN-AI" && colorSet && !AI_Set) {AI_Set = true; std::cout << "OK \t\t\t ;set AI difficulty"<< std::endl;}
+	else if(s == "AI-AI" && colorSet && !AI_Set) { AI_Set = true; }
+	else if(s == "HUMAN-AI" && colorSet && !AI_Set) {AI_Set = true; }
 	
 	//STEP 3) set difficulty, AI_diff_set is a restriction if the user tries to enter a diff. again or has not entered color or game type skip this statement  
-	else if(s == "HARD" && !AI_diff_Set && colorSet && AI_Set) { AI_diff_Set = true; unsigned int hard = 7; setup_ai(hard) ;std::cout << "OK"<< std::endl;}
-	else if(s == "EASY" && !AI_diff_Set && colorSet && AI_Set) { AI_diff_Set = true; unsigned int easy = 2; setup_ai(easy); std::cout << "OK"<< std::endl;}
-	else if(s == "MEDIUM" && !AI_diff_Set && colorSet && AI_Set) {AI_diff_Set = true; unsigned int med = 4; setup_ai(med);std::cout << "OK"<< std::endl;}
+	else if(s == "HARD" && !AI_diff_Set && colorSet && AI_Set) { AI_diff_Set = true; unsigned int hard = 7; setup_ai(hard) ;}
+	else if(s == "EASY" && !AI_diff_Set && colorSet && AI_Set) { AI_diff_Set = true; unsigned int easy = 2; setup_ai(easy); }
+	else if(s == "MEDIUM" && !AI_diff_Set && colorSet && AI_Set) {AI_diff_Set = true; unsigned int med = 4; setup_ai(med);}
 	
 	//STEP 4) if user had not satisfied previous steps then game is not set up and cannot use these commands 
-	else if(s == "DISPLAY" && colorSet && AI_Set && AI_diff_Set && !display) {display = true; std::cout <<"OK"<< std::endl; _e.print(); std::cout <<"Enter move"<<std::endl;}
-	else if(s == "UNDO" && colorSet && AI_Set && AI_diff_Set) {std::cout <<"OK"<< std::endl; _e.undo_move();}
+	else if(s == "DISPLAY" && colorSet && AI_Set && AI_diff_Set && !display) {display = true; return 3;}
+	else if(s == "UNDO" && colorSet && AI_Set && AI_diff_Set) {_e.undo_move();}
 	else if(s == "EXIT") {exit();}
 	
 	//Step 5) Enter valid moves, sends to move parser has satified previous steps and has entered DISPLAY, parser checks move's validity then needs to check legality 
-	else if(s.length() == 2 && colorSet && AI_Set && AI_diff_Set &&display){parse_move(s);}
+	else if(s.length() == 2 && colorSet && AI_Set && AI_diff_Set && display){ char c = s.at(0); s[0] = s[1]; s[1] = c; return parse_move(s);}
 	
 	else 
 	{
@@ -113,6 +124,10 @@ std::string Game_Server::reply(int i) {
 		return "ILLEGAL COMMAND\n";
 	if(i == 1)
 		return "OK\n";
+	if(i==2)
+		return "Enter Move\n";
+	if(i == 3)
+		return _e.print();
 	return "\n";
 }
 

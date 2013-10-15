@@ -1,3 +1,4 @@
+
 # 			MAKEFILE 
 #		  CSCE 315-503
 #		REVERSI Project
@@ -20,7 +21,7 @@ CC=g++
 
 all: gse_test gai_test gserv_test main
 
-game_state_engine.o: game_state_engine.h game_state_engine.cpp
+game_state_engine.o: game_state_engine.h Position.h game_state_engine.cpp
 	$(CC) -c -g game_state_engine.cpp
 	
 gse_test: gse_test.cpp game_state_engine.o

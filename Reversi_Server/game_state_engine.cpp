@@ -17,10 +17,10 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
-#include<vector>
-
-#include "Position.h"
+#include <sstream>
 #include "game_state_engine.h"
+#include "Position.h"
+#include <vector>
 
 Gamestate_Engine::Gamestate_Engine() {
 	_board.resize(GRID_SIZE);
@@ -35,10 +35,23 @@ Gamestate_Engine::Gamestate_Engine() {
 	_board[(GRID_SIZE/2)-1] [d] = BLACK;
 	_board[(GRID_SIZE/2)-1] [e] = YELLOW;
 	
+	_board[GRID_SIZE/2]     [e+1] = LEGAL_YELLOW;
+	_board[GRID_SIZE/2-1]     [d-1] = LEGAL_YELLOW;
+	
+	_board[GRID_SIZE/2-1]     [e+1] = LEGAL_BLACK;
+	_board[GRID_SIZE/2]     [d-1] = LEGAL_BLACK;
+	
+	_board[GRID_SIZE/2+1]     [e] = LEGAL_YELLOW;
+	_board[GRID_SIZE/2+1]     [d] = LEGAL_BLACK;
+	
+	_board[(GRID_SIZE/2)-2] [d] = LEGAL_YELLOW;
+	_board[(GRID_SIZE/2)-2] [e] = LEGAL_BLACK;
+		
 	//TEST CASE
 	//_board[0] [h] = YELLOW;
 }
 	
+
 bool Gamestate_Engine::move(std::string square_id) {
 	//do work
 	// Returns false if invalid, otherwise update _board to reflect move made
@@ -46,15 +59,13 @@ bool Gamestate_Engine::move(std::string square_id) {
 	// Insert move to played_moves for use with undo/redo
 	// Input square_id is the chosen destination for moved piece 
 	// Check is_play(); if false, game-over
-	
-	vector<Position>check; 
-	vector<Position>first;
-	vector<Position>diagonals;
+	std::vector<Position>check; 
+	std::vector<Position>first;
+	std::vector<Position>diagonals;
 	int row;
 	int colum;
 	int change = 0;
 	int checkcolor=0;
-	int change = 0; 
 	bool valid =  false; 
 	bool vertical = false; 
 	bool diagonal = false; 
@@ -82,6 +93,8 @@ bool Gamestate_Engine::move(std::string square_id) {
     stoi_loc(square_id,row, colum); 
 //______________________________________________
  
+ _board[row][colum] = (State) playernum;
+ 
  // check if it spot is not already taken 
  if(_board[row].at(colum)==0)
  {
@@ -103,8 +116,8 @@ bool Gamestate_Engine::move(std::string square_id) {
 	int k = check[w].getValue(); 
 				if(k==checkcolor)// depending on the player the 2 can be a 1 or 2? 
 				{
-					cout<<"there is an opposite color besides you"<<endl; 
-					cout<<Checkcolor<<endl; 
+					std::cout<<"there is an opposite color besides you"<<std::endl; 
+					std::cout<<checkcolor<<std::endl; 
 					valid = true; 
 					first.push_back(check[w]); 
 
@@ -139,7 +152,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 
 									for(int t = colum; t>change; t-- )
 									{
-									_board[row].at(t)=playernum;
+									_board[row][t]=(State)playernum;
 									}
 								}
 
@@ -147,7 +160,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 								{
 									for(int t = colum; t<change; t++ )
 									{
-									_board[row].at(t)=playernum;
+									_board[row][t]=(State)playernum;
 									}
 								
 								}	
@@ -174,7 +187,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 								{
 									for(int q=row; q>change; q--)
 									{
-										_board[q].at(colum)=player;
+										_board[q][colum]=(State)player;
 									}
 								}
 
@@ -182,7 +195,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 								{
 									for(int q = row; q<= change; q++)
 									{
-									_board[q].at(colum)=playernum;
+									_board[q][colum]=(State)playernum;
 									}
 								}
 							}
@@ -218,7 +231,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 										{
 											int r = diagonals[i].getRow(); 
 											int c =diagonals[i].getColum();
-											_board[r].at(c)=playernum;
+											_board[r][c]=(State)playernum;
 
 										}
 									diagonals.clear();
@@ -247,13 +260,13 @@ bool Gamestate_Engine::move(std::string square_id) {
 									j++;
 									}
 								
-								if(diagonal=true)
+								if(diagonal == true)
 								{
 									for(int i = 0; i< diagonals.size(); i++)
 									{
 										int r = diagonals[i].getRow(); 
 										int c =diagonals[i].getColum();
-										_board[r].at(c)=playernum;
+										_board[r][c]=(State)playernum;
 
 									}
 								diagonals.clear();
@@ -291,7 +304,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 										{
 											int r= diagonals[i].getRow(); 
 											int c =diagonals[i].getColum();
-											_board[r].at(c)=playernum;
+											_board[r][c]=(State)playernum;
 
 										}
 								diagonals.clear();
@@ -332,7 +345,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 										{
 											int r = diagonals[i].getRow(); 
 											int c =diagonals[i].getColum();
-											_board[r].at(c)=playernum;
+											_board[r][c]=(State)playernum;
 
 										}
 								diagonals.clear();
@@ -359,7 +372,7 @@ bool Gamestate_Engine::move(std::string square_id) {
 										if(p>8) break;
 											if(_board[v][p]==playernum)
 											{
-											printf("valid")
+											printf("valid");
 											diagonal = true; 
 											break;
 											}
@@ -368,13 +381,13 @@ bool Gamestate_Engine::move(std::string square_id) {
 										
 									}
 									
-									if(diagonal= true)
+									if(diagonal == true)
 									{
 											for(int i = 0; i< diagonals.size(); i++)
 											{
 												int r = diagonals[i].getRow(); 
 												int c =diagonals[i].getColum();
-												_board[r].at(c)=playernum;
+												_board[r][c]=(State)playernum;
 
 											}
 									diagonals.clear();
@@ -407,13 +420,13 @@ bool Gamestate_Engine::move(std::string square_id) {
 									 n--; 
 									}
 									
-									if(diagonal= true)
+									if(diagonal == true)
 									{
 											for(int i = 0; i< diagonals.size(); i++)
 											{
 												int r = diagonals[i].getRow(); 
 												int c =diagonals[i].getColum();
-												_board[r].at(c)=playernum;
+												_board[r][c]=(State)playernum;
 
 											}
 									diagonals.clear();
@@ -455,7 +468,6 @@ final = false;
 	
 	return final;
 }
-
 bool Gamestate_Engine::unmove(std::string square_id) {
 	//do work
 	return true;
@@ -502,32 +514,39 @@ bool Gamestate_Engine::is_legal_black(std::string square_id) {
 	return false;
 }
 
-void Gamestate_Engine::print() {
+std::string Gamestate_Engine::print() {
 	system("clear");
 	// System call to clear screen 
-	std::cout << ";  _ _ _ _ _ _ _ _\n";
+	std::string s;
+	s = ";  _ _ _ _ _ _ _ _\n";
 	for (int i = 0; i < _board.size(); ++i) {
-		std::cout << ';' << i << '|';
+		s+= ";";
+		//taken from stackoverflow forum
+		std::ostringstream stream;
+		stream << s << i;
+		s = stream.str();
+		s+= "|";
 		for (int j = 0; j < _board[i].size(); ++j) {
 			switch(_board[i][j]) {
 				case EMPTY:
-					std::cout << '_';
+					s+= "_";
 					break;
 				case YELLOW:
-					std::cout << '0';
+					s+= "0";
 					break;
 				case BLACK:
-					std::cout << 'X';
+					s+= "X";
 					break;
 				default:
-					std::cout << '_';
+					s+= "_";
 					break;
 			}
-			std::cout << '|';
+			s+= "|";
 		}
-		std::cout << '\n';
+		s+= "\n";
 	}
-	std::cout << ";  a b c d e f g h\n\n";
+	s+= ";  a b c d e f g h\n\n";
+	return s;
 }
 
 std::string Gamestate_Engine::get_board() {
@@ -575,6 +594,7 @@ void Gamestate_Engine::stoi_loc(std::string s, int &x, int &y) {
 	//Quick and dirty: Never ever ever ever do this.
 	if ( (x < 0) || (y < 0) || (x >= GRID_SIZE) || (y >= GRID_SIZE) ) {
 		printf("ERROR : stoi_loc(s, x, y) | x and/or y out of bounds;\n");
+		std::cout<<x<<" "<<y<<" "<<s<<std::endl;
 	}
 }
 

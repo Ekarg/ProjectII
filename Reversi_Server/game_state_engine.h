@@ -33,6 +33,8 @@ private:
 	std::stack<std::string> undid_moves; //stack of string representations of boards that have been undone
 
 	bool player_color;
+	bool can_play;
+	std::string winner;
 	// True = YELLOW; False = BLACK;
 
 public:
@@ -43,6 +45,8 @@ public:
 	//	1.) Two yellow, two black pieces in middle of the board
 	//	....
 	//
+	
+	void check_play();
 	
 	bool move(std::string square_id);
 	// Returns false if invalid, otherwise update _board to reflect move made
@@ -102,7 +106,11 @@ public:
 	int get_color();
 	//gets player's color
 	
+	void legality();
 	
+	void ai_move(int y, int x);
+	
+	std::string get_winner() {return winner;}
 };
 
 #endif

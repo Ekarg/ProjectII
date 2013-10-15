@@ -21,7 +21,7 @@
 #include "game_state_engine.h"
 #include "Position.h"
 #include <vector>
-
+#include <time.h> 
 Gamestate_Engine::Gamestate_Engine() {
 	_board.resize(GRID_SIZE);
 	for (int i = 0; i < GRID_SIZE; ++i) {
@@ -47,427 +47,479 @@ Gamestate_Engine::Gamestate_Engine() {
 	_board[(GRID_SIZE/2)-2] [d] = LEGAL_YELLOW;
 	_board[(GRID_SIZE/2)-2] [e] = LEGAL_BLACK;
 		
+		
+	can_play=true;	
 	//TEST CASE
 	//_board[0] [h] = YELLOW;
 }
 	
 
 bool Gamestate_Engine::move(std::string square_id) {
-	//do work
-	// Returns false if invalid, otherwise update _board to reflect move made
-	// Simplistic parsing of two character move command should be done here
-	// Insert move to played_moves for use with undo/redo
-	// Input square_id is the chosen destination for moved piece 
-	// Check is_play(); if false, game-over
-	std::vector<Position>check; 
-	std::vector<Position>first;
-	std::vector<Position>diagonals;
-	int row;
-	int colum;
-	int change = 0;
-	int checkcolor=0;
-	bool valid =  false; 
-	bool vertical = false; 
-	bool diagonal = false; 
-	bool horizontal = false ;
-	bool final = false; 
-	//parse the command? 
-	//square_id parse depending on which one i  the a or b 
-	
-	bool player = get_color();
-	int playernum;
-	
-	if(player == true)
-	{
-	playernum = YELLOW ; // player is YELLOW
-	checkcolor = BLACK;
+	if(!can_play) 
+		return false;
+	int x, y;
+	stoi_loc(square_id, y, x);
+	int other_color;
+	int our_color;
+	if (player_color) {
+		_board[y][x] = YELLOW;
+		our_color = YELLOW;
+		other_color = BLACK;
 	}
-	if(player == false)
-	{
-	playernum == BLACK; 
-	checkcolor = YELLOW;
+	else {
+		_board[y][x] = BLACK;
+		other_color = YELLOW;
+		our_color = BLACK;
 	}
-
-//________________________________________________
- // pasrsed string_id  the number is in row the letter is in colum
-    stoi_loc(square_id,row, colum); 
-//______________________________________________
- 
- _board[row][colum] = (State) playernum;
- 
- // check if it spot is not already taken 
- if(_board[row].at(colum)==0)
- {
- //first test is there another color beside this position 
- // look and see if there is another color besides yours around you; 
-// there gots to be a color oposite to yours besides you 
-		check.push_back(Position(row,colum,_board[row].at(colum-1)));
-		check.push_back(Position(row,colum+1,_board[row].at(colum+1)));
-		check.push_back(Position(row-1,colum-1,_board[row-1].at(colum-1)));
-		check.push_back(Position(row-1,colum+1,_board[row-1].at(colum+1)));
-		check.push_back(Position(row-1,colum,_board[row-1].at(colum)));
-		check.push_back(Position(row+1,colum-1,_board[row+1].at(colum-1)));
-		check.push_back(Position(row+1,colum+1,_board[row+1].at(colum+1)));
-		check.push_back(Position(row+1,colum,_board[row+1].at(colum)));
-
-//go through to see if it can find an opposite color 		
-	for(int w = 0; w < check.size(); w++)
-	{
-	int k = check[w].getValue(); 
-				if(k==checkcolor)// depending on the player the 2 can be a 1 or 2? 
-				{
-					std::cout<<"there is an opposite color besides you"<<std::endl; 
-					std::cout<<checkcolor<<std::endl; 
-					valid = true; 
-					first.push_back(check[w]); 
-
-				}
-	}
-    
-	check.clear();
-				if(valid == true)
-				{
-				//_board[row].at(colum)=playernum;
-
-
-						for(int u = 0; u < first.size(); u++)
-						{
-						int rows = first[u].getRow();
-						int colums = first[u].getColum(); 
-						//check if there is a horizontal
-							if(row==rows)
-							{
-								for(int s = 0; _board[row].size(); s++)
-								{
-									if(_board[row][s] == playernum && s != colum)
-									{
-									printf("valid move");
-									horizontal = true; 
-									change = s; 
-									break; 
-									}
-								}
-								if(colum>change)
-								{
-
-									for(int t = colum; t>change; t-- )
-									{
-									_board[row][t]=(State)playernum;
-									}
-								}
-
-								if(colum<change)
-								{
-									for(int t = colum; t<change; t++ )
-									{
-									_board[row][t]=(State)playernum;
-									}
-								
-								}	
-								
-							}
-							else
-							{
-							printf("no Horizontal");
-							}
-						// check if there is a vertical	
-							if(colum == colums)
-							{
-								for(int f = 0; f < _board.size(); f++)
-								{
-									if(_board[f][g]==playernum && m !=f)
-									{
-									printf("valid move"); 
-									vertical = true; 
-									change = f; 
-									break; 
-									}
-								}
-								if(row>change)
-								{
-									for(int q=row; q>change; q--)
-									{
-										_board[q][colum]=(State)player;
-									}
-								}
-
-								if(row<change)
-								{
-									for(int q = row; q<= change; q++)
-									{
-									_board[q][colum]=(State)playernum;
-									}
-								}
-							}
-							else
-							{
-							printf("no Vertical");
-							}
-				
-				// diagonal
-							if(row != 0) // if the slot is not at the top
-							{
-								if(rows == row-1 && colums == colum-1)
-								{
-								diagonals.push_back(Position(rows,colums,_board[rows][colums]));
-								int d = colum-2; // going current position left 
-								
-									for(int y = row-2; y <= 0; y--) // going current position up 
-									{
-										if(d<0 || y<0) break;
-										
-										if(_board[y][d] == playernum)
-										{
-										printf("valid");
-										diagonal = true; 
-										break; 
-										}
-										diagonals.push_back(Position(y,d,_board[y][d]));
-										d--;
-									}
-									if(diagonal = true)
-									{
-										for(int i = 0; i< diagonals.size(); i++)
-										{
-											int r = diagonals[i].getRow(); 
-											int c =diagonals[i].getColum();
-											_board[r][c]=(State)playernum;
-
-										}
-									diagonals.clear();
-									}
-									else
-									{
-									diagonals.clear(); 
-									}
-								}
-								else printf("no diagonal"); 
-							//-----------------upper right diagonal--------------	
-								if(rows == row-1 && colums == colum+1)
-								{
-									diagonals.push_back(Position(rows,colums,_board[rows][colums]));
-									int j = colum+2; 
-									for (int b=m-2; b<= 0; b--)
-									{
-										if(j==8||b<0) break; 
-									
-										if(_board[b][j]==playernum)
-										{	
-										diagonal= true;
-										break; 
-										}
-									diagonals.push_back(Position(b,j,_board[b][j]));
-									j++;
-									}
-								
-								if(diagonal == true)
-								{
-									for(int i = 0; i< diagonals.size(); i++)
-									{
-										int r = diagonals[i].getRow(); 
-										int c =diagonals[i].getColum();
-										_board[r][c]=(State)playernum;
-
-									}
-								diagonals.clear();
-								}
-								else
-								{
-								diagonals.clear();
-								}
-								}
-								else printf("no diagonal");
-					//----------------lower left diagonal -------------------	
-								if(rows == row+1 && colums == colum-1)
-								{
-								diagonals.push_back(Position(rows,colums,_board[rows][colums]));
-									int l = colum-2;
-									for(int c = m+2; c < 8; c++)
-									{
-
-										if(c==8||l<0)
-										{
-											break;
-										}
-									if(_board[c][l]==playernum)
-										{
-										printf("valid");
-										diagonal=true;
-										break; 
-										}
-									diagonals.push_back(Position(c,l,_board[c][l]));
-									l--;
-									}
-									if(diagonal = true)
-									{
-										for(int i = 0; i< diagonals.size(); i++)
-										{
-											int r= diagonals[i].getRow(); 
-											int c =diagonals[i].getColum();
-											_board[r][c]=(State)playernum;
-
-										}
-								diagonals.clear();
-									}
-									else
-									{
-									diagonals.clear(); 
-									}
-									
-								}
-								else printf("no diagonal");
-						//-----------lower right diagonal---------------------------		
-								if(rows ==m+1 && colums ==g+1)
-								{
-								diagonals.push_back(Position(rows,colums,_board[rows][colums])); 
-								int x= colum+2; 
-
-								for(int c = row+2; c < 8; c++)
-								{
-								if(x==8||c==8)
-								{
-								break; 
-								}
-
-								if(_board[c][x]==playernum)
-									{
-									printf("valid");
-									diagonal = true;
-									break; 
-									}
-								diagonals.push_back(Position(c,x,_board[c][x]));
-								x++;
-								}
-								
-									if(diagonal = true)
-									{
-										for(int i = 0; i< diagonals.size(); i++)
-										{
-											int r = diagonals[i].getRow(); 
-											int c =diagonals[i].getColum();
-											_board[r][c]=(State)playernum;
-
-										}
-								diagonals.clear();
-									}
-									else
-									{
-									diagonals.clear();
-									}
-								}
-								else printf("no diagonal");
-								
-							}
-							else printf("no diagonal");
-						//------------------upper left and upper right------------	
-							if(row == 0)
-							{
-							//----------left---------------------
-								if(rows == row+1 && colums == colum+1)
-								{
-									diagonals.push_back(Position(rows, colums, _board[rows][colums])); 
-									int p = colum+2; 
-									for(int v = row+2; v < 8; v++)
-									{
-										if(p>8) break;
-											if(_board[v][p]==playernum)
-											{
-											printf("valid");
-											diagonal = true; 
-											break;
-											}
-											diagonals.push_back(Position(v,p,_board[v][p]));
-											p++;
-										
-									}
-									
-									if(diagonal == true)
-									{
-											for(int i = 0; i< diagonals.size(); i++)
-											{
-												int r = diagonals[i].getRow(); 
-												int c =diagonals[i].getColum();
-												_board[r][c]=(State)playernum;
-
-											}
-									diagonals.clear();
-									}
-
-									else
-									{
-									diagonals.clear(); 
-									}
-								}
-								else printf("no diagonal");
-								//----------- right-----------------
-								if(rows == row+1 && colums == colum-1)
-								{
-									diagonals.push_back(Position(rows,colums,_board[rows][colums]));
-									int n = colum-2; 
-									for(int v = m+2; v < 8; v++)
-									{
-											if(v==8||n<0)
-											{
-											break;
-											}
-										if(_board[v][n]==playernum)
-										{
-										printf("valid"); 
-										diagonal = true;
-										break; 
-										}
-										diagonals.push_back(Position(v,n,_board[v][n])); 
-									 n--; 
-									}
-									
-									if(diagonal == true)
-									{
-											for(int i = 0; i< diagonals.size(); i++)
-											{
-												int r = diagonals[i].getRow(); 
-												int c =diagonals[i].getColum();
-												_board[r][c]=(State)playernum;
-
-											}
-									diagonals.clear();
-									}
-
-									else
-									{
-									diagonals.clear(); 
-									}
-								
-								}
-								else printf("no diagonal");
-							
-							}
-								if(diagonal == true || vertical == true || horizontal == true)
-								{
-								printf("legal move");
-								final = true; 
-								}
-						
-						}
-						
-												
-
-				}
-				
-				else 
-				{
-				printf("invalid move");
-				 final = false; 
-				}
- }
- else
- {
-printf("ERROR : spot %i %i is already taken ",row,colum);
-final = false; 
- }
- 
+	std::stack<int> xs;
+	std::stack<int> ys;
+	int count = 0;
 	
-	return final;
+	//Diag
+	int a = x+1;
+	int b = y+1;
+	
+	for ( ; ( (a < GRID_SIZE) && (b < GRID_SIZE) ); ) {
+		if (_board[b][a] == other_color) {
+			xs.push(a);
+			ys.push(b);
+			++count;			
+		}
+		else if (_board[b][a] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+		++a;
+		++b;
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	a = x-1;
+	b = y-1;
+	for ( ; ( (a > 0) && (b > 0) ); ) {
+		if (_board[b][a] == other_color) {
+			xs.push(a);
+			ys.push(b);
+			++count;
+		}
+		else if (_board[b][a] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+		--a;
+		--b;
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	a = x-1;
+	b = y+1; 
+	for ( ; ( (a > 0) && (b < GRID_SIZE) ); ) {
+		if (_board[b][a] == other_color) {
+			xs.push(a);
+			ys.push(b);
+			++count;
+		}
+		else if (_board[b][a] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+		--a;
+		++b;
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	a = x+1;
+	b = y-1;
+	for ( ; ( (a < GRID_SIZE) && (b>0) ); ) {
+		if (_board[b][a] == other_color) {
+			xs.push(a);
+			ys.push(b);
+			++count;
+		}
+		else if (_board[b][a] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+		++a;
+		--b;
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	a = x;
+	b = y;
+	//Diag
+
+	
+	//---Horizontal
+	
+	for (int i = y+1; i < GRID_SIZE; ++i) {
+		if (_board[i][x] == other_color) {
+			xs.push(x);
+			ys.push(i);
+			++count;
+		}
+		else if (_board[i][x] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	
+	for (int i = y-1; i > 0; --i) {
+		if (_board[i][x] == other_color) {
+			xs.push(x);
+			ys.push(i);
+			++count;
+		}
+		else if (_board[i][x] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	
+	//---Horizontal
+	
+	//---Vertical
+	
+	for (int i = x+1; i < GRID_SIZE; ++i) {
+		if (_board[y][i] == other_color) {
+			xs.push(i);
+			ys.push(y);
+			++count;
+		}
+		else if (_board[y][i] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	for (int i = x-1; i > 0; --i) {
+		if (_board[y][i] == other_color) {
+			xs.push(i);
+			ys.push(y);
+			++count;
+		}
+		else if (_board[y][i] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	
+	//---Vertical
+	while(!xs.empty() && !ys.empty()) {
+		int x_cor = xs.top();
+		int y_cor = ys.top(); 
+		xs.pop();
+		ys.pop();
+		_board[y_cor][x_cor] = _board[y][x];
+	}
+	
+	legality();
+	std::vector<int> x_cor;
+	std::vector<int> y_cor;
+	if(player_color) {
+		for(int x = 0; x < GRID_SIZE; x++)
+			for(int y = 0; y<GRID_SIZE; y++) {
+				if(_board[y][x] == LEGAL_BLACK || _board[y][x] == LEGAL_BOTH) {
+					x_cor.push_back(x); 
+					y_cor.push_back(y);
+				}			
+		}
+	//	srand (time(NULL));
+	//	int m = rand() % (x_cor.size());
+		set_color("BLACK");
+		ai_move(y_cor[0], x_cor[0]);
+		set_color("YELLOW");
+	}
+	
+	
+	
+	else {
+		for(int x = 0; x < GRID_SIZE; x++)
+			for(int y = 0; y<GRID_SIZE; y++) {
+				if(_board[y][x] == LEGAL_YELLOW || _board[y][x] == LEGAL_BOTH) {
+					x_cor.push_back(x); 
+					y_cor.push_back(y);
+				}
+			srand (time(NULL));
+			int m = rand() % (x_cor.size());
+			set_color("YELLOW");
+			ai_move(y_cor[0], x_cor[0]);
+			set_color("BLACK");
+		}	
+	}
+	check_play();
+	return can_play;
 }
+
+void Gamestate_Engine::ai_move(int y, int x) {
+	int other_color;
+	int our_color;
+	if (player_color) {
+		_board[y][x] = YELLOW;
+		our_color = YELLOW;
+		other_color = BLACK;
+	}
+	else {
+		_board[y][x] = BLACK;
+		other_color = YELLOW;
+		our_color = BLACK;
+	}
+	std::stack<int> xs;
+	std::stack<int> ys;
+	int count = 0;
+	
+	//Diag
+	int a = x+1;
+	int b = y+1;
+	
+	for ( ; ( (a < GRID_SIZE) && (b < GRID_SIZE) ); ) {
+		if (_board[b][a] == other_color) {
+			xs.push(a);
+			ys.push(b);
+			++count;			
+		}
+		else if (_board[b][a] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+		++a;
+		++b;
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	a = x-1;
+	b = y-1;
+	for ( ; ( (a > 0) && (b > 0) ); ) {
+		if (_board[b][a] == other_color) {
+			xs.push(a);
+			ys.push(b);
+			++count;
+		}
+		else if (_board[b][a] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+		--a;
+		--b;
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	a = x-1;
+	b = y+1; 
+	for ( ; ( (a > 0) && (b < GRID_SIZE) ); ) {
+		if (_board[b][a] == other_color) {
+			xs.push(a);
+			ys.push(b);
+			++count;
+		}
+		else if (_board[b][a] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+		--a;
+		++b;
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	a = x+1;
+	b = y-1;
+	for ( ; ( (a < GRID_SIZE) && (b>0) ); ) {
+		if (_board[b][a] == other_color) {
+			xs.push(a);
+			ys.push(b);
+			++count;
+		}
+		else if (_board[b][a] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+		++a;
+		--b;
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	a = x;
+	b = y;
+	//Diag
+
+	
+	//---Horizontal
+	
+	for (int i = y+1; i < GRID_SIZE; ++i) {
+		if (_board[i][x] == other_color) {
+			xs.push(x);
+			ys.push(i);
+			++count;
+		}
+		else if (_board[i][x] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	
+	for (int i = y-1; i > 0; --i) {
+		if (_board[i][x] == other_color) {
+			xs.push(x);
+			ys.push(i);
+			++count;
+		}
+		else if (_board[i][x] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	
+	//---Horizontal
+	
+	//---Vertical
+	
+	for (int i = x+1; i < GRID_SIZE; ++i) {
+		if (_board[y][i] == other_color) {
+			xs.push(i);
+			ys.push(y);
+			++count;
+		}
+		else if (_board[y][i] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	for (int i = x-1; i > 0; --i) {
+		if (_board[y][i] == other_color) {
+			xs.push(i);
+			ys.push(y);
+			++count;
+		}
+		else if (_board[y][i] == our_color) {
+			count = 0;
+			break;
+		}
+		else {		
+			break;
+		}
+	}
+	while (count > 0) {
+		xs.pop();
+		ys.pop();
+		--count;
+	}
+	
+	//---Vertical
+	while(!xs.empty() && !ys.empty()) {
+		int x_cor = xs.top();
+		int y_cor = ys.top(); 
+		xs.pop();
+		ys.pop();
+		_board[y_cor][x_cor] = _board[y][x];
+	}
+	
+	legality();
+}
+
+
 bool Gamestate_Engine::unmove(std::string square_id) {
 	//do work
 	return true;
@@ -593,8 +645,7 @@ void Gamestate_Engine::stoi_loc(std::string s, int &x, int &y) {
 	y = ((int)s_2[0]) - 97;
 	//Quick and dirty: Never ever ever ever do this.
 	if ( (x < 0) || (y < 0) || (x >= GRID_SIZE) || (y >= GRID_SIZE) ) {
-		printf("ERROR : stoi_loc(s, x, y) | x and/or y out of bounds;\n");
-		std::cout<<x<<" "<<y<<" "<<s<<std::endl;
+		printf("ERROR : stoi_loc(s, x, y) | x and/or y out of bounds;\n");		
 	}
 }
 
@@ -615,8 +666,453 @@ int Gamestate_Engine::get_color()
 	return player_color;
 }
 
+void Gamestate_Engine::legality() {
+	for(int x = 0; x < GRID_SIZE; x++)
+		for(int y = 0; y<GRID_SIZE; y++) {
+			if(_board[y][x] != YELLOW && _board[y][x] !=BLACK) {
+					int other_color;
+					int our_color;
+					
+					other_color = YELLOW;
+					our_color = BLACK;
+					std::stack<int> xs;
+					std::stack<int> ys;
+					int count = 0;
+		
+					//Diag
+					int a = x+1;
+					int b = y+1;
+					
+					for ( ; ( (a < GRID_SIZE) && (b < GRID_SIZE) ); ) {
+						if (_board[b][a] == other_color) {
+							xs.push(a);
+							ys.push(b);
+							++count;
+						}
+						else if (_board[b][a] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+						++a;
+						++b;
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					a = x-1;
+					b = y-1;
+					for ( ; ( (a > 0) && (b > 0) ); ) {
+						if (_board[b][a] == other_color) {
+							xs.push(a);
+							ys.push(b);
+							++count;
+						}
+						else if (_board[b][a] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+						--a;
+						--b;
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					a = x-1;
+					b = y+1;
+					for ( ; ( (a > 0) && (b < GRID_SIZE) ); ) {
+						if (_board[b][a] == other_color) {
+							xs.push(a);
+							ys.push(b);
+							++count;
+						}
+						else if (_board[b][a] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+						--a;
+						++b;
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					a = x+1;
+					b = y-1;
+					for ( ; ( (a < GRID_SIZE) && (b > 0) ); ) {
+						if (_board[b][a] == other_color) {
+							xs.push(a);
+							ys.push(b);
+							++count;
+						}
+						else if (_board[b][a] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+						++a;
+						--b;
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					a = x;
+					b = y;
+					//Diag
+
+					
+					//---Vertical
+					
+					for (int i = y+1 ; i < GRID_SIZE; ++i) {
+						if (_board[i][x] == other_color) {
+							xs.push(x);
+							ys.push(i);
+							++count;
+						}
+						else if (_board[i][x] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+				
+					for (int i = y-1; i > 0; --i) {
+						if (_board[i][x] == other_color) {
+							xs.push(x);
+							ys.push(i);
+							++count;
+						}
+						else if (_board[i][x] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					
+					//---Horizontal
+					
+					for (int i = x+1; i < GRID_SIZE; ++i) {
+						if (_board[y][i] == other_color) {
+							xs.push(i);
+							ys.push(y);
+							++count;
+						}
+						else if (_board[y][i] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					for (int i = x-1; i > 0; --i) {
+						if (_board[y][i] == other_color) {
+							xs.push(i);
+							ys.push(y);
+							++count;
+						}
+						else if (_board[y][i] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					
+					if(xs.size() > 0) 
+						_board[y][x] = LEGAL_BLACK;				
+					else
+						_board[y][x] = EMPTY;	
+					}
+		}
+					for(int x = 0; x < GRID_SIZE; x++)
+						for(int y = 0; y < GRID_SIZE; y++) {
+							if(_board[y][x] != YELLOW && _board[y][x] != BLACK) {
+								
+								int other_color = BLACK;
+								int our_color = YELLOW;
+								
+								std::stack<int> xs;
+								std::stack<int> ys;
+								int count = 0;
+								
+										//Diag
+					int a = x+1;
+					int b = y+1;
+					
+					for ( ; ( (a < GRID_SIZE) && (b < GRID_SIZE) ); ) {
+						if (_board[b][a] == other_color) {
+							xs.push(a);
+							ys.push(b);
+							++count;
+						}
+						else if (_board[b][a] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+						++a;
+						++b;
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					a = x-1;
+					b = y-1;
+					for ( ; ( (a > 0) && (b > 0) ); ) {
+						if (_board[b][a] == other_color) {
+							xs.push(a);
+							ys.push(b);
+							++count;
+						}
+						else if (_board[b][a] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+						--a;
+						--b;
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					a = x-1;
+					b = y+1;
+					for ( ; ( (a > 0) && (b < GRID_SIZE) ); ) {
+						if (_board[b][a] == other_color) {
+							xs.push(a);
+							ys.push(b);
+							++count;
+						}
+						else if (_board[b][a] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+						--a;
+						++b;
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					a = x+1;
+					b = y-1;
+					for ( ; ( (a < GRID_SIZE) && (b > 0) ); ) {
+						if (_board[b][a] == other_color) {
+							xs.push(a);
+							ys.push(b);
+							++count;
+						}
+						else if (_board[b][a] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+						++a;
+						--b;
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					a = x;
+					b = y;
+					//Diag
+
+					
+					//---Vertical
+					
+					for (int i = y+1 ; i < GRID_SIZE; ++i) {
+						if (_board[i][x] == other_color) {
+							xs.push(x);
+							ys.push(i);
+							++count;
+						}
+						else if (_board[i][x] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+				
+					for (int i = y-1; i > 0; --i) {
+						if (_board[i][x] == other_color) {
+							xs.push(x);
+							ys.push(i);
+							++count;
+						}
+						else if (_board[i][x] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					
+					//---Horizontal
+					
+					for (int i = x+1; i < GRID_SIZE; ++i) {
+						if (_board[y][i] == other_color) {
+							xs.push(i);
+							ys.push(y);
+							++count;
+						}
+						else if (_board[y][i] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+					for (int i = x-1; i > 0; --i) {
+						if (_board[y][i] == other_color) {
+							xs.push(i);
+							ys.push(y);
+							++count;
+						}
+						else if (_board[y][i] == our_color) {
+							count = 0;
+							break;
+						}
+						else {		
+							break;
+						}
+					}
+					while (count > 0) {
+						xs.pop();
+						ys.pop();
+						--count;
+					}
+											
+					if(xs.size() > 0) 
+					{
+						if(_board[y][x] == LEGAL_BLACK)
+							_board[y][x] = LEGAL_BOTH;
+						else
+							_board[y][x] = LEGAL_YELLOW;								
+					}	
+									
+				}
+				
+			}
+}
 
 
+void Gamestate_Engine::check_play() {
+	bool black_can = false;
+	bool yellow_can =false;
+	for(int x = 0; x < GRID_SIZE; x++)
+		for(int y = 0; y < GRID_SIZE; y++) {
+			if(_board[y][x] == LEGAL_BLACK || _board[y][x] == LEGAL_BOTH) {
+				black_can=true;
+				return;
+			}
+	}
+	
+	for(int x = 0; x < GRID_SIZE; x++)
+		for(int y = 0; y < GRID_SIZE; y++) {
+			if(_board[y][x] == LEGAL_YELLOW || _board[y][x] == LEGAL_BOTH) {
+				yellow_can=true;
+				return;
+			}
+	}
+
+	if(!yellow_can && !black_can) {
+		winner = "IT'S A TIE!";
+		can_play = false;
+	}
+	
+	else if (yellow_can && !black_can) {
+		if(player_color)
+			winner = "You win!\n";
+		else 
+			winner = "You lose!\n";
+		can_play = false;
+	}
+	else if (!yellow_can && black_can) {
+		if(!player_color)
+			winner = "You win!\n";
+		else 
+			winner = "You win\n";
+		can_play = false;
+	}
+}
 
 
 

@@ -7,7 +7,6 @@
 			
     WHITE SHIT ABOUT AI HERE
 
-	
 */
 
 #ifndef _AI_

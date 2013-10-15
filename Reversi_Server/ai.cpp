@@ -49,6 +49,7 @@ void AI::create_tree(std::string state) {
 
 std::string AI::choose() {
 	//do work
+
 	return "dowork";
 }
 

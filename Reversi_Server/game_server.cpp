@@ -38,7 +38,6 @@ void Game_Server::run() {
 int Game_Server::parse_move(std::string move)
 {
  //Lazy man's parser, checks first char in string if valid checks second char in string from the pool of all possible moves, else invalid move
-	
 	bool check_legal; // true == legal move, false == illegal move
 	if (move[1] == 'a' || move[1] == 'b' || move[1] == 'c' || move[1] == 'd' || move[1] == 'e' || move[1] == 'f' || move[1] == 'g' || move[1] == 'h')
 	{
@@ -48,7 +47,8 @@ int Game_Server::parse_move(std::string move)
 			{
 				if(check_legal = _e.is_legal_black(move) == true)
 				{
-					_e.move(move);
+					if(!_e.move(move)) //GAME OVER
+						return 4;
 					return 3;
 				}
 				else
@@ -60,7 +60,8 @@ int Game_Server::parse_move(std::string move)
 			{
 				if(check_legal = _e.is_legal_yellow(move) == true)
 				{
-					_e.move(move);
+					if(!_e.move(move)) //GAME OVER
+						return 4;
 					return 3;
 				}
 				else
@@ -83,14 +84,7 @@ int Game_Server::parse_move(std::string move)
 unsigned int Game_Server::parse_cmd(std::string s){
 	if(s.length() < 3)
 		return 0;
-	std::cout<<"Passed here\n";
 	s.erase(s.end()-2, s.end());
-	for(int i=0; i<s.length(); i++)
-	{
-		char c = s.at(i);
-		std::cout<<(int)c<<std::endl;
-	}
-	std::cout<<s<<std::endl;
 	//STEP 1) set HUMAN and AI color, colorSet is a restriction if the user tries to enter a color query again we skip this statement 
 	if(s == "BLACK" && !colorSet) {colorSet = true; _e.set_color("BLACK"); _ai.set_ai_color("YELLOW");} 
 	else if(s == "YELLOW" && !colorSet) {colorSet = true; _e.set_color("YELLOW"); _ai.set_ai_color("BLACK");} 
@@ -128,6 +122,8 @@ std::string Game_Server::reply(int i) {
 		return "Enter Move\n";
 	if(i == 3)
 		return _e.print();
+	if(i == 4)
+		return _e.get_winner();
 	return "\n";
 }
 

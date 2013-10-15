@@ -71,7 +71,7 @@ public:
 	
 	void exit();
 	// Obvious.
-	
+
 	
 };
 

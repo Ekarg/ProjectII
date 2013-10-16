@@ -40,7 +40,7 @@ gserv_test: gserv_test.cpp game_server.o ai.o game_state_engine.o
 	$(CC) -o gserv_test gserv_test.cpp game_server.o ai.o game_state_engine.o
 
 main: main.cpp game_server.o game_state_engine.o ai.o 
-	$(CC) -o main main.cpp game_server.o game_state_engine.o ai.o
+	$(CC) -o main main.cpp game_server.o game_state_engine.o ai.o -lsocket -lnsl
 	
 clean:
 	/bin/rm -rf *.o gse_test

@@ -1,7 +1,7 @@
 /* 
     File: ai.h
 
-    Authors: Grace Coffman, Sidian Wu, Alejandro Vega, Wesley Tang
+    Authors: Grace Coffman, Sidian Wu, Alejandro Vega, Violeta Torres, Wesley Tang
             Department of Computer Science
             Texas A&M University
 			
@@ -21,11 +21,10 @@
 
 class AI {
 private:
-	enum Color { YELLOW = 1, BLACK = 2};
 	class Board_state;
 	
 	tree<std::string> _tree;
-	Color color;
+	State color;
 	unsigned int difficulty; 
 	// difficulty is a scalar which we use to adjust allotted search time
 	// and/or tree depth for AI and/or sub-optimalization of choices
@@ -35,7 +34,7 @@ private:
 
 public:
 	AI(): difficulty(0), color(BLACK) {}
-	AI(unsigned int i): difficulty(0), color((Color)i) {}
+	AI(unsigned int i): difficulty(0), color((State)i) {}
 	
 	void out_diff(){ std::cout << difficulty;} // test function outputs ai difficulty 
 	void out_color(){std::cout << color;} // test function outputs ai color 

@@ -1,7 +1,7 @@
 /* 
     File: game_state_engine.h
 
-    Authors: Grace Coffman, Sidian Wu, Alejandro Vega, Wesley Tang
+    Authors: Grace Coffman, Sidian Wu, Alejandro Vega, Violeta Torres, Wesley Tang
             Department of Computer Science
             Texas A&M University
 			
@@ -22,7 +22,6 @@
 class Gamestate_Engine {
 private:
 
-	enum State { EMPTY = 0, YELLOW = 1, BLACK = 2, LEGAL_YELLOW = 3, LEGAL_BLACK = 4, LEGAL_BOTH = 5};
 	enum columns { a = 0, b = 1, c = 2, d = 3, e = 4, f = 5, g = 6, h = 7, i = 8, 
 					j = 9, k = 10, l = 11, m = 12, n = 13, o = 14, p = 15, q = 16, 
 					r = 17, s = 18, t = 19, u = 20, v = 21, w = 22, x = 23, y = 24, 

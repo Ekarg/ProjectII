@@ -1,7 +1,7 @@
 /*
     File: game_state_engine.h
 
-    Authors: Grace Coffman, Sidian Wu, Alejandro Vega, Wesley Tang
+    Authors: Grace Coffman, Sidian Wu, Alejandro Vega, Violeta Torres, Wesley Tang
             Department of Computer Science
             Texas A&M University
 			

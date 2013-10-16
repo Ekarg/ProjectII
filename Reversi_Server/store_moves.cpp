@@ -1,4 +1,13 @@
+/* 
+    File: store_moves.cpp
 
+    Authors: Grace Coffman, Sidian Wu, Alejandro Vega, Violeta Torres, Wesley Tang
+            Department of Computer Science
+            Texas A&M University
+			
+    *---* DESCRIPTION *---*
+
+*/
 
 /* 
 	messy way of storing all possible moves to check move validity when user enters one, don't know how a tokenizer will help

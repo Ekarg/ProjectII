@@ -2,7 +2,7 @@
 /* 
     File: Position.h
 
-    Authors: Violeta Torres 
+    Authors: Grace Coffman, Sidian Wu, Alejandro Vega, Violeta Torres, Wesley Tang
             Department of Computer Science
             Texas A&M University
 			

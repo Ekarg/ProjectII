@@ -14,11 +14,18 @@
 #include "game_state_engine.h"
 
 
-bool colorSet = false; //checks if user has already entered a color
-bool AI_Set = false; //checks if users has already entered game type
-bool AI_diff_Set = false; //checks if user has already entered a difficulty
-bool display = false; //checks if user has entered diplay command
+// bool colorSet = false; //checks if user has already entered a color
+// bool AI_Set = false; //checks if users has already entered game type
+// bool AI_diff_Set = false; //checks if user has already entered a difficulty
+bool display = false; //checks if user has entered display command
 
+void Game_Server::Default_Setup() //didn't init game type (HUMAN-AI/AI-AI) because it does nothing as of now
+{
+	unsigned int easy = 2;
+	setup_ai(easy);
+	_e.set_color("YELLOW"); //user is always yellow
+	_ai.set_ai_color("BLACK");//ai is always black 
+}
 
 Game_Server::Game_Server() {
 	_e = Gamestate_Engine();
@@ -82,29 +89,32 @@ int Game_Server::parse_move(std::string move)
 }
 
 unsigned int Game_Server::parse_cmd(std::string s){
+	
 	if(s.length() < 3)
 		return 0;
-	s.erase(s.end()-2, s.end());
+	//s.erase(s.end()-2, s.end());  //this is cutting off the string into a string of length 2 (really bad who did this?)
 	//STEP 1) set HUMAN and AI color, colorSet is a restriction if the user tries to enter a color query again we skip this statement 
-	if(s == "BLACK" && !colorSet) {colorSet = true; _e.set_color("BLACK"); _ai.set_ai_color("YELLOW");} 
-	else if(s == "YELLOW" && !colorSet) {colorSet = true; _e.set_color("YELLOW"); _ai.set_ai_color("BLACK");} 
+	// if(s == "BLACK" && !colorSet) {colorSet = true; _e.set_color("BLACK"); _ai.set_ai_color("YELLOW");} 
+	// else if(s == "YELLOW" && !colorSet) {colorSet = true; _e.set_color("YELLOW"); _ai.set_ai_color("BLACK");} 
 	
-	//STEP 2) set game type, AI_Set is a restriction if the user tries to enter a gametype query again or not set colors skip this statement  
-	else if(s == "AI-AI" && colorSet && !AI_Set) { AI_Set = true; }
-	else if(s == "HUMAN-AI" && colorSet && !AI_Set) {AI_Set = true; }
+	// //STEP 2) set game type, AI_Set is a restriction if the user tries to enter a gametype query again or not set colors skip this statement  
+	// else if(s == "AI-AI" && colorSet && !AI_Set) { AI_Set = true; }
+	// else if(s == "HUMAN-AI" && colorSet && !AI_Set) {AI_Set = true; }
 	
-	//STEP 3) set difficulty, AI_diff_set is a restriction if the user tries to enter a diff. again or has not entered color or game type skip this statement  
-	else if(s == "HARD" && !AI_diff_Set && colorSet && AI_Set) { AI_diff_Set = true; unsigned int hard = 7; setup_ai(hard) ;}
-	else if(s == "EASY" && !AI_diff_Set && colorSet && AI_Set) { AI_diff_Set = true; unsigned int easy = 2; setup_ai(easy); }
-	else if(s == "MEDIUM" && !AI_diff_Set && colorSet && AI_Set) {AI_diff_Set = true; unsigned int med = 4; setup_ai(med);}
+	// //STEP 3) set difficulty, AI_diff_set is a restriction if the user tries to enter a diff. again or has not entered color or game type skip this statement  
+	// else if(s == "HARD" && !AI_diff_Set && colorSet && AI_Set) { AI_diff_Set = true; unsigned int hard = 7; setup_ai(hard) ;}
+	// else if(s == "EASY" && !AI_diff_Set && colorSet && AI_Set) { AI_diff_Set = true; unsigned int easy = 2; setup_ai(easy); }
+	// else if(s == "MEDIUM" && !AI_diff_Set && colorSet && AI_Set) {AI_diff_Set = true; unsigned int med = 4; setup_ai(med);}
 	
 	//STEP 4) if user had not satisfied previous steps then game is not set up and cannot use these commands 
-	else if(s == "DISPLAY" && colorSet && AI_Set && AI_diff_Set && !display) {display = true; return 3;}
-	else if(s == "UNDO" && colorSet && AI_Set && AI_diff_Set) {_e.undo_move();}
+	// else if(s == "DISPLAY" && colorSet && AI_Set && AI_diff_Set && !display) {display = true; return 3;}
+	
+	if(s == "DISPLAY" && !display) {Default_Setup(); display = true; return 3;}
+	else if(s == "UNDO" /*&& colorSet && AI_Set && AI_diff_Set*/) {_e.undo_move();}
 	else if(s == "EXIT") {exit();}
 	
-	//Step 5) Enter valid moves, sends to move parser has satified previous steps and has entered DISPLAY, parser checks move's validity then needs to check legality 
-	else if(s.length() == 2 && colorSet && AI_Set && AI_diff_Set && display){ char c = s.at(0); s[0] = s[1]; s[1] = c; return parse_move(s);}
+	//Step 5) Enter valid moves, sends to move parser has satisfied previous steps and has entered DISPLAY, parser checks move's validity then needs to check legality 
+	else if(s.length() == 2 /*&& colorSet && AI_Set && AI_diff_Set*/ && display){ char c = s.at(0); s[0] = s[1]; s[1] = c; return parse_move(s);}
 	
 	else 
 	{

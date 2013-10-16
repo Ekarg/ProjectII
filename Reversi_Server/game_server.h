@@ -71,6 +71,8 @@ public:
 	
 	void exit();
 	// Obvious.
+	void Default_Setup();
+	//default game 
 
 	
 };

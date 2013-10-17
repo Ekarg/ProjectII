@@ -55,8 +55,10 @@ Gamestate_Engine::Gamestate_Engine() {
 	
 
 bool Gamestate_Engine::move(std::string square_id) {
-	if(!can_play) 
+	if(!can_play) {
 		return false;
+	}
+	played_moves.push(_board);
 	int x, y;
 	stoi_loc(square_id, y, x);
 	int other_color;
@@ -291,12 +293,22 @@ bool Gamestate_Engine::is_play() {
 }
 
 bool Gamestate_Engine::undo_move() {
-	//do work
+	if (played_moves.empty()) {
+		printf("ERROR : UNABLE TO UNDO, played_moves stack is empty;\n");
+		return false;
+	}
+	undid_moves.push(played_moves.top());
+	played_moves.pop();
 	return true;
 }
 
 bool Gamestate_Engine::redo_move() {
-	//do work
+	if (undid_moves.empty()) {
+		printf("ERROR : UNABLE TO REDO, undid_moves stack is empty;\n");
+		return false;
+	}
+	_board = undid_moves.top();
+	undid_moves.pop();
 	return true;
 }
 

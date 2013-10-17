@@ -28,8 +28,8 @@ private:
 					z = 25};
 					
 	std::vector<std::vector<State> > _board;
-	std::stack<std::string> played_moves; //stack of string representations of previous boards
-	std::stack<std::string> undid_moves; //stack of string representations of boards that have been undone
+	std::stack<std::vector<std::vector<State> > > played_moves; //stack of string representations of previous boards
+	std::stack<std::vector<std::vector<State> > > undid_moves; //stack of string representations of boards that have been undone
 
 	bool player_color;
 	bool can_play;

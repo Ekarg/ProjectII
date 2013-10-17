@@ -33,6 +33,9 @@ public:
 			std::cout << '\n';
 		}
 	}
+	std::vector<std::vector<int> > get_board() {
+		return board;
+	}
 };
 
 
@@ -43,14 +46,86 @@ unsigned int AI::compare(std::string a, std::string b) {
 
 void AI::create_tree(std::string state) {
 	Board_state b = Board_state(state); //TESTING
+	_board = b.get_board();
 	//do work
 	return;
 }
 
-std::string AI::choose() {
-	//do work
+std::string AI::chooseHard() {
 
-	return "dowork";
+	return "do work\n";
+}
+
+std::string AI::chooseMedium() {
+
+	return "do work\n";
+}
+
+std::string AI::chooseEasy() {
+	std::vector<int> x_cor;
+	std::vector<int> y_cor;
+	
+	std::stringstream ssx;
+	std::stringstream ssy;
+	std::string s = "";
+	std::cout<<"IN CHOOSE()\n";
+	//std::cout<<_board.size()<<std::endl;
+	//std::cout<<_board[0].size()<<std::endl;
+	if(color == YELLOW) {
+		for(int y = 0; y < GRID_SIZE; y++)
+			for(int x = 0; x < GRID_SIZE; x++) {
+				if(_board[y][x] == LEGAL_YELLOW || _board[y][x] == LEGAL_BOTH) {
+					x_cor.push_back(x); 
+					y_cor.push_back(y);
+				}			
+		}
+		std::cout<<"After loop\n";
+		srand (time(NULL));
+		int m = rand() % (x_cor.size());
+		//set_color("BLACK");
+		//ai_move(y_cor[m], x_cor[m]);
+		//set_color("YELLOW");
+		std::string a;	
+	
+		ssy << y_cor[m];
+		ssy >> a;
+		std::cout<<a<<std::endl;
+		s += a;
+		
+		ssx << x_cor[m];
+		ssx >> a;
+		s += a;
+		std::cout<<a<<std::endl;
+		return s;
+	}
+	
+	
+	
+	else {
+		for(int y = 0; y < GRID_SIZE; y++)
+			for(int x = 0; x < GRID_SIZE; x++) {
+				if(_board[y][x] == LEGAL_BLACK || _board[y][x] == LEGAL_BOTH) {
+					x_cor.push_back(x); 
+					y_cor.push_back(y);
+				}
+			}
+			srand (time(NULL));
+			int m = rand() % (x_cor.size());			
+			std::string a;	
+			
+			ssy << y_cor[m];
+			ssy >> a;
+			std::cout<<a<<std::endl;
+			s += a;
+			
+			ssx << x_cor[m];
+			ssx >> a;
+			s += a;
+			std::cout<<a<<std::endl;
+			
+			
+			return s;
+	}
 }
 
 void AI::set_difficulty(unsigned int i) {

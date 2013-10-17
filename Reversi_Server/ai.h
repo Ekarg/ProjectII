@@ -26,6 +26,7 @@ private:
 	tree<std::string> _tree;
 	State color;
 	unsigned int difficulty; 
+	std::vector<std::vector<int> > _board;
 	// difficulty is a scalar which we use to adjust allotted search time
 	// and/or tree depth for AI and/or sub-optimalization of choices
 	// 0 = randomly chosen move
@@ -53,7 +54,9 @@ public:
 		Call compare on all the boardstates to see which one is the winning choice (?)
 	*/
 	
-	std::string choose();
+	std::string chooseEasy();
+	std::string chooseMedium();
+	std::string chooseHard();
 	/*
 		Called only after the tree has been created. Bredth first search through tree
 		to determine the choice the AI makes. Each branch contains a gamestate in the
@@ -67,6 +70,7 @@ public:
 	void set_ai_color(std::string ai_color);
 	//sets AI color 
 	
+	unsigned int get_difficulty() { return difficulty; }	
 };
 
 #endif

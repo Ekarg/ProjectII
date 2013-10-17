@@ -17,6 +17,13 @@
 #include "global_const.h"
 #include "game_state_engine.h"
 #include "ai.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h> 
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 class Game_Server {
 private:
@@ -36,6 +43,9 @@ public:
 	void setup_ai(unsigned int difficulty);
 	// If AI mode is chosen, this function is called.
 	// Initializes _ai as well as set difficulty.
+	
+	void ai_play(); 
+	//indicates to AI it is it's turn to play 
 	
 	void run();
 	// Server client interface is handled in here. Server makes a

@@ -269,256 +269,10 @@ bool Gamestate_Engine::move(std::string square_id) {
 	}
 	
 	legality();
-	std::vector<int> x_cor;
-	std::vector<int> y_cor;
-	if(player_color) {
-		for(int x = 0; x < GRID_SIZE; x++)
-			for(int y = 0; y<GRID_SIZE; y++) {
-				if(_board[y][x] == LEGAL_BLACK || _board[y][x] == LEGAL_BOTH) {
-					x_cor.push_back(x); 
-					y_cor.push_back(y);
-				}			
-		}
-	//	srand (time(NULL));
-	//	int m = rand() % (x_cor.size());
-		set_color("BLACK");
-		ai_move(y_cor[0], x_cor[0]);
-		set_color("YELLOW");
-	}
-	
-	
-	
-	else {
-		for(int x = 0; x < GRID_SIZE; x++)
-			for(int y = 0; y<GRID_SIZE; y++) {
-				if(_board[y][x] == LEGAL_YELLOW || _board[y][x] == LEGAL_BOTH) {
-					x_cor.push_back(x); 
-					y_cor.push_back(y);
-				}
-			srand (time(NULL));
-			int m = rand() % (x_cor.size());
-			set_color("YELLOW");
-			ai_move(y_cor[0], x_cor[0]);
-			set_color("BLACK");
-		}	
-	}
 	check_play();
+	printf("Move made\n");
 	return can_play;
 }
-
-void Gamestate_Engine::ai_move(int y, int x) {
-	int other_color;
-	int our_color;
-	if (player_color) {
-		_board[y][x] = YELLOW;
-		our_color = YELLOW;
-		other_color = BLACK;
-	}
-	else {
-		_board[y][x] = BLACK;
-		other_color = YELLOW;
-		our_color = BLACK;
-	}
-	std::stack<int> xs;
-	std::stack<int> ys;
-	int count = 0;
-	
-	//Diag
-	int a = x+1;
-	int b = y+1;
-	
-	for ( ; ( (a < GRID_SIZE) && (b < GRID_SIZE) ); ) {
-		if (_board[b][a] == other_color) {
-			xs.push(a);
-			ys.push(b);
-			++count;			
-		}
-		else if (_board[b][a] == our_color) {
-			count = 0;
-			break;
-		}
-		else {		
-			break;
-		}
-		++a;
-		++b;
-	}
-	while (count > 0) {
-		xs.pop();
-		ys.pop();
-		--count;
-	}
-	a = x-1;
-	b = y-1;
-	for ( ; ( (a > 0) && (b > 0) ); ) {
-		if (_board[b][a] == other_color) {
-			xs.push(a);
-			ys.push(b);
-			++count;
-		}
-		else if (_board[b][a] == our_color) {
-			count = 0;
-			break;
-		}
-		else {		
-			break;
-		}
-		--a;
-		--b;
-	}
-	while (count > 0) {
-		xs.pop();
-		ys.pop();
-		--count;
-	}
-	a = x-1;
-	b = y+1; 
-	for ( ; ( (a > 0) && (b < GRID_SIZE) ); ) {
-		if (_board[b][a] == other_color) {
-			xs.push(a);
-			ys.push(b);
-			++count;
-		}
-		else if (_board[b][a] == our_color) {
-			count = 0;
-			break;
-		}
-		else {		
-			break;
-		}
-		--a;
-		++b;
-	}
-	while (count > 0) {
-		xs.pop();
-		ys.pop();
-		--count;
-	}
-	a = x+1;
-	b = y-1;
-	for ( ; ( (a < GRID_SIZE) && (b>0) ); ) {
-		if (_board[b][a] == other_color) {
-			xs.push(a);
-			ys.push(b);
-			++count;
-		}
-		else if (_board[b][a] == our_color) {
-			count = 0;
-			break;
-		}
-		else {		
-			break;
-		}
-		++a;
-		--b;
-	}
-	while (count > 0) {
-		xs.pop();
-		ys.pop();
-		--count;
-	}
-	a = x;
-	b = y;
-	//Diag
-
-	
-	//---Horizontal
-	
-	for (int i = y+1; i < GRID_SIZE; ++i) {
-		if (_board[i][x] == other_color) {
-			xs.push(x);
-			ys.push(i);
-			++count;
-		}
-		else if (_board[i][x] == our_color) {
-			count = 0;
-			break;
-		}
-		else {		
-			break;
-		}
-	}
-	while (count > 0) {
-		xs.pop();
-		ys.pop();
-		--count;
-	}
-	
-	for (int i = y-1; i > 0; --i) {
-		if (_board[i][x] == other_color) {
-			xs.push(x);
-			ys.push(i);
-			++count;
-		}
-		else if (_board[i][x] == our_color) {
-			count = 0;
-			break;
-		}
-		else {		
-			break;
-		}
-	}
-	while (count > 0) {
-		xs.pop();
-		ys.pop();
-		--count;
-	}
-	
-	//---Horizontal
-	
-	//---Vertical
-	
-	for (int i = x+1; i < GRID_SIZE; ++i) {
-		if (_board[y][i] == other_color) {
-			xs.push(i);
-			ys.push(y);
-			++count;
-		}
-		else if (_board[y][i] == our_color) {
-			count = 0;
-			break;
-		}
-		else {		
-			break;
-		}
-	}
-	while (count > 0) {
-		xs.pop();
-		ys.pop();
-		--count;
-	}
-	for (int i = x-1; i > 0; --i) {
-		if (_board[y][i] == other_color) {
-			xs.push(i);
-			ys.push(y);
-			++count;
-		}
-		else if (_board[y][i] == our_color) {
-			count = 0;
-			break;
-		}
-		else {		
-			break;
-		}
-	}
-	while (count > 0) {
-		xs.pop();
-		ys.pop();
-		--count;
-	}
-	
-	//---Vertical
-	while(!xs.empty() && !ys.empty()) {
-		int x_cor = xs.top();
-		int y_cor = ys.top(); 
-		xs.pop();
-		ys.pop();
-		_board[y_cor][x_cor] = _board[y][x];
-	}
-	
-	legality();
-}
-
 
 bool Gamestate_Engine::unmove(std::string square_id) {
 	//do work
@@ -612,7 +366,7 @@ std::string Gamestate_Engine::get_board() {
 			s += a;
 			s += " ";
 		}
-		s += "\n";
+		//s += "\n";
 	}
 	return s;
 }
@@ -642,6 +396,10 @@ void Gamestate_Engine::stoi_loc(std::string s, int &x, int &y) {
 	s.erase(s.end()-1); // s = x;
 	x = atoi(s.c_str());
 	//Quick and dirty: Never ever ever ever do this.
+	if( s_2[0] < '9' && s_2[0] > '0') { 
+		y = atoi(s_2.c_str());
+		return;
+	}
 	y = ((int)s_2[0]) - 97;
 	//Quick and dirty: Never ever ever ever do this.
 	if ( (x < 0) || (y < 0) || (x >= GRID_SIZE) || (y >= GRID_SIZE) ) {

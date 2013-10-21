@@ -14,13 +14,15 @@
 
 #include <string>
 
+#include "gui.h" 
+
 class Game_Client {
 private:
 
 
 public:
 	
-	bool send_cmd(string s);
+	bool send_cmd(std::string s);
 	// Takes in the user command and sends it to the server	
 	// The response from the server is printed out in this function to the main screen
 	// The return value specifies if the game has ended and the connection should be termintated
@@ -30,6 +32,9 @@ public:
 	
 	bool disconnect();
 	// Close socket connection
+	
+	void run_gui();
+	//runs gui
 	
 };
 

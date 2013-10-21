@@ -13,11 +13,7 @@
 #ifndef _Gamestate_Engine_
 #define _Gamestate_Engine_
 
-#include <vector>
-#include <stack>
-#include <string>
-
-#include "global_const.h"
+#include "stdafx.h"
 
 class Gamestate_Engine {
 private:

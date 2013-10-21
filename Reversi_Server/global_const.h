@@ -12,10 +12,14 @@
 #ifndef _GLOBAL_CONST_
 #define _GLOBAL_CONST_
 
+#define OUT_OF_RANGE  32767
+
 const int GRID_SIZE = 8;
 const unsigned int PORT = 4001;
 
 enum State { EMPTY = 0, YELLOW = 1, BLACK = 2, LEGAL_YELLOW = 3, LEGAL_BLACK = 4, LEGAL_BOTH = 5};
+
+
 
 #endif
 

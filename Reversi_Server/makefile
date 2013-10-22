@@ -30,7 +30,7 @@ gse_test: gse_test.cpp game_state_engine.o
 Game_Tree.o: Game_Tree.h Game_Tree.cpp
 	$(CC) -c -g Game_Tree.cpp
 	
-ai.o: ai.h ai.cpp
+ai.o: ai.h ai.cpp Position.h
 	$(CC) -c -g ai.cpp
 	
 gai_test: gai_test.cpp ai.o Game_Tree.o

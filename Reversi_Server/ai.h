@@ -42,8 +42,9 @@ public:
 	AI(unsigned int i): difficulty(0), color((State)i) {}
 	
 	void out_diff(){ std::cout << difficulty;} // test function outputs ai difficulty 
-	void out_color(){std::cout << color;} // test function outputs ai color 
+	State out_color(){ return color;} // test function outputs ai color 
 	unsigned int compare(std::string a, std::string b);
+	string convert(int x, int y);
 	// compares two boardstates and decides which is "winning"
 	// return 0 for equal
 	// return 1 for a > b
@@ -60,7 +61,7 @@ public:
 	
 	std::string chooseEasy();
 	std::string chooseMedium();
-	std::vector<std::vector<int> > chooseHard();
+	std::string chooseHard();
 	/*
 		Called only after the tree has been created. Bredth first search through tree
 		to determine the choice the AI makes. Each branch contains a gamestate in the

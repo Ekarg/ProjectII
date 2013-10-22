@@ -14,18 +14,18 @@
 #include <string>
 #include <map>
 #include<vector>
-
+#include "global_const.h"
 
 class Position
 {
 private: 
 	int row;
 	int colum; 
-	int value;
+	State value;
 public: 
 	Position(){}  // 
-	Position(int r, int c, int v): row(r),colum(c), value(v){}
+	Position(int r, int c, State v): row(r),colum(c), value(v){}
 	int getColum(){return colum;}
 	int getRow(){return row; }
-	int getValue(){return value; }
+	State getValue(){return value; }
 };

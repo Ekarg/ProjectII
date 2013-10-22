@@ -223,12 +223,14 @@ void Game_Server::ai_play() {
 	_ai.create_tree(_e.get_board());
 	std::string m  = " ";
 	if(_ai.get_difficulty() == 7 )
-		m = _ai.chooseHard();
+		{m = _ai.chooseHard();
+		_e.move(m);}
 	else if(_ai.get_difficulty() == 4 )
-		m = _ai.chooseMedium();
+		{m = _ai.chooseMedium();
+		_e.move(m);}
 	else 
-		m = _ai.chooseEasy();
-	_e.move(m);
+		{m = _ai.chooseEasy();
+	_e.move(m);}
 	
 	if(_e.get_color())
 		_e.set_color("BLACK");

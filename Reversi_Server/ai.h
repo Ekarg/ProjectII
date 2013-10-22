@@ -42,7 +42,7 @@ public:
 	AI(unsigned int i): difficulty(0), color((State)i) {}
 	
 	void out_diff(){ std::cout << difficulty;} // test function outputs ai difficulty 
-	State out_color(){ return color;} // test function outputs ai color 
+	State get_color(){ return color;} // test function outputs ai color 
 	unsigned int compare(std::string a, std::string b);
 	string convert(int x, int y);
 	// compares two boardstates and decides which is "winning"

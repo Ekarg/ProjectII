@@ -62,24 +62,20 @@ void AI::create_tree(std::string state) {
 	printf("tree created\n");
 	_board = b.get_board();
 	_board_c.resize(GRID_SIZE);
-	for (int i = 0; i < GRID_SIZE; ++i) {
-	_board_c[i].resize(GRID_SIZE);
-			for (int j = 0; j < GRID_SIZE; ++j) {
-				if(_board[i][j] == 0) {_board_c[i][j] = EMPTY;}
-				else if(_board[i][j] == 1) {_board_c[i][j] = YELLOW;}
-				else if(_board[i][j] == 2) {_board_c[i][j] = BLACK;}
-				else if(_board[i][j] == 3) {_board_c[i][j] = LEGAL_YELLOW;}
-				else if(_board[i][j] == 4) {_board_c[i][j] = LEGAL_BLACK;}
-				else if(_board[i][j] == 5) {_board_c[i][j] = LEGAL_BOTH;}
-			}
-			}
-	printf("tree enum\n");		
-	for (int i = 0; i < GRID_SIZE; ++i) {
-			for (int j = 0; j < GRID_SIZE; ++j) {
-				std::cout << _board_c[i][j];
-			}
-				std::cout << '\n';
-			}
+	for (int i = 0; i < GRID_SIZE; ++i) 
+	{
+		_board_c[i].resize(GRID_SIZE);
+				for (int j = 0; j < GRID_SIZE; ++j) 
+				{
+					if(_board[i][j] == 0) {_board_c[i][j] = EMPTY;}
+					else if(_board[i][j] == 1) {_board_c[i][j] = YELLOW;}
+					else if(_board[i][j] == 2) {_board_c[i][j] = BLACK;}
+					else if(_board[i][j] == 3) {_board_c[i][j] = LEGAL_YELLOW;}
+					else if(_board[i][j] == 4) {_board_c[i][j] = LEGAL_BLACK;}
+					else if(_board[i][j] == 5) {_board_c[i][j] = LEGAL_BOTH;}
+				}
+		}
+	
 	//do work
 	return;
 }
@@ -96,146 +92,201 @@ std::string AI::chooseHard() {
  std::vector<std::vector<State> >new_board; 
  int letter;
  int number; 
- 		for (int i = 0; i < GRID_SIZE; ++i) {
-			for (int j = 0; j < GRID_SIZE; ++j) {
-			if(_board_c[i][j] == LEGAL_BLACK)
+ string temp = ""; 
+ 
+ 
+ 	if(get_color() == 2) // ai is black 
+	{
+		for (int i = 0; i < GRID_SIZE; ++i) 
+		{
+			for (int j = 0; j < GRID_SIZE; ++j) 
+			{
+				if(_board_c[i][j] == LEGAL_BLACK)
 				{
-				old_values.push_back(Position(i,j,_board_c[i][j])); 
+					old_values.push_back(Position(i,j,_board_c[i][j])); 
 				}
 			}
-			}
+		}
 			
-			// for(int h = 0; h<old_values.size(); h++)
-			// {
-			 // std::cout<<old_values[h].getColum()<<" "<<old_values[h].getRow()<<" "<<old_values[h].getValue()<<std::endl; 
-			// }
-		std::cout << "In hard mode " << std::endl;
-		
-			new_board = gt.alphaBeta(_board_c, BLACK, -60, 60, 6);
+		new_board = gt.alphaBeta(_board_c, BLACK, -60, 60, 6);
 			 		
-					
-		for (int i = 0; i < GRID_SIZE; ++i) {
-			for (int j = 0; j < GRID_SIZE; ++j) {
-			if(new_board[i][j] == BLACK)
+		for (int i = 0; i < GRID_SIZE; ++i) 
+		{
+			for (int j = 0; j < GRID_SIZE; ++j)
+			{
+				if(new_board[i][j] == BLACK)
 				{
-				new_values.push_back(Position(i,j,new_board[i][j])); 
+					new_values.push_back(Position(i,j,new_board[i][j])); 
 				}
 			}
 	
-			}
-			
-			// for(int h = 0; h<new_values.size(); h++)
-			// {
-			 // std::cout<<new_values[h].getColum()<<" "<<new_values[h].getRow()<<" "<<new_values[h].getValue()<<std::endl; 
-			// }
-	
-	
-	// this will check if the values are the same 		
+		}
+		// this will check if the values are the same 		
 		for(int g = 0; g<new_values.size(); g++)
 		{
 			for(int n = 0; n<old_values.size(); n++)
 			{
-			 if(new_values[g].getColum() == old_values[n].getColum() && new_values[g].getRow() == old_values[n].getRow() )
-			 { 
-			  // new move 
-			  letter = new_values[g].getColum(); 
-			  number = new_values[g].getRow();
-			  
-			 }
+				 if(new_values[g].getColum() == old_values[n].getColum() && new_values[g].getRow() == old_values[n].getRow() )
+				 { 
+				  // new move 
+				  letter = new_values[g].getColum(); 
+				  number = new_values[g].getRow();
+				  
+				 }
 			}
 		
 		}
-	 
-		std::cout<<letter<<std::endl; 
-		std::cout<<number<<std::endl;
+	}
+	
+	if(get_color() == 1) // ai is yellow
+	{
+		for (int i = 0; i < GRID_SIZE; ++i) 
+		{
+			for (int j = 0; j < GRID_SIZE; ++j) 
+			{
+				if(_board_c[i][j] == LEGAL_YELLOW)
+				{
+					old_values.push_back(Position(i,j,_board_c[i][j])); 
+				}
+			}
+		}
+			
+		new_board = gt.alphaBeta(_board_c, YELLOW, -60, 60, 6);
+			 		
+		for (int i = 0; i < GRID_SIZE; ++i) 
+		{
+			for (int j = 0; j < GRID_SIZE; ++j)
+			{
+				if(new_board[i][j] == YELLOW)
+				{
+					new_values.push_back(Position(i,j,new_board[i][j])); 
+				}
+			}
+	
+		}
+		// this will check if the values are the same 		
+		for(int g = 0; g<new_values.size(); g++)
+		{
+			for(int n = 0; n<old_values.size(); n++)
+			{
+				 if(new_values[g].getColum() == old_values[n].getColum() && new_values[g].getRow() == old_values[n].getRow() )
+				 { 
+				  // new move 
+				  letter = new_values[g].getColum(); 
+				  number = new_values[g].getRow();
+				  
+				 }
+			}
 		
-		string temp = ""; 
-
-		temp=convert(number,letter);
+		}
+	}
+	 
+	temp = convert(number,letter);
 	
 	std::cout<<" AI Move = "<<temp<<std::endl; 
 
-	//string new_board = "";
-	//new_board = gt.print(gt.alphaBeta(_board_c, BLACK, -50, 50, 5));
-	//Board_state nb = Board_state(new_board);
 	return temp;
 }
 
 std::string AI::chooseMedium() {
 
-// check what color the AI is??
-// need help figuring out what the color is for the AI 
-
-
-//default color is black for now 
-// runs for AI being black 
  std::vector<Position>old_values; 
  std::vector<Position>new_values;
  std::vector<std::vector<State> >new_board; 
  int letter;
  int number; 
- 		for (int i = 0; i < _board_c.size(); ++i) {
-			for (int j = 0; j < _board_c[j].size(); ++j) {
-			if(_board_c[i][j] == LEGAL_BLACK)
+ string temp = ""; 
+ 
+if(get_color() == 2) // ai is black 
+	{
+		for (int i = 0; i < GRID_SIZE; ++i) 
+		{
+			for (int j = 0; j < GRID_SIZE; ++j) 
+			{
+				if(_board_c[i][j] == LEGAL_BLACK)
 				{
-				old_values.push_back(Position(i,j,_board_c[i][j])); 
+					old_values.push_back(Position(i,j,_board_c[i][j])); 
 				}
 			}
-			}
+		}
 			
-			// for(int h = 0; h<old_values.size(); h++)
-			// {
-			 // std::cout<<old_values[h].getColum()<<" "<<old_values[h].getRow()<<" "<<old_values[h].getValue()<<std::endl; 
-			// }
-		std::cout << "In hard mode " << std::endl;
-		
-			new_board = gt.alphaBeta(_board_c, BLACK, -40, 40, 4);
+		new_board = gt.alphaBeta(_board_c, BLACK, -40, 40, 4);
 			 		
-					
-		for (int i = 0; i < new_board.size(); ++i) {
-			for (int j = 0; j < new_board[j].size(); ++j) {
-			if(new_board[i][j] == BLACK)
+		for (int i = 0; i < GRID_SIZE; ++i) 
+		{
+			for (int j = 0; j < GRID_SIZE; ++j)
+			{
+				if(new_board[i][j] == BLACK)
 				{
-				new_values.push_back(Position(i,j,new_board[i][j])); 
+					new_values.push_back(Position(i,j,new_board[i][j])); 
 				}
 			}
 	
-			}
-			
-			// for(int h = 0; h<new_values.size(); h++)
-			// {
-			 // std::cout<<new_values[h].getColum()<<" "<<new_values[h].getRow()<<" "<<new_values[h].getValue()<<std::endl; 
-			// }
-	
-	
-	// this will check if the values are the same 		
+		}
+		// this will check if the values are the same 		
 		for(int g = 0; g<new_values.size(); g++)
 		{
 			for(int n = 0; n<old_values.size(); n++)
 			{
-			 if(new_values[g].getColum() == old_values[n].getColum() && new_values[g].getRow() == old_values[n].getRow() )
-			 { 
-			  // new move 
-			  letter = new_values[g].getColum(); 
-			  number = new_values[g].getRow();
-			  
-			 }
+				 if(new_values[g].getColum() == old_values[n].getColum() && new_values[g].getRow() == old_values[n].getRow() )
+				 { 
+				  // new move 
+				  letter = new_values[g].getColum(); 
+				  number = new_values[g].getRow();
+				  
+				 }
 			}
 		
 		}
-	 
-		std::cout<<letter<<std::endl; 
-		std::cout<<number<<std::endl;
+	}
+	
+	if(get_color() == 1) // ai is yellow
+	{
+		for (int i = 0; i < GRID_SIZE; ++i) 
+		{
+			for (int j = 0; j < GRID_SIZE; ++j) 
+			{
+				if(_board_c[i][j] == LEGAL_YELLOW)
+				{
+					old_values.push_back(Position(i,j,_board_c[i][j])); 
+				}
+			}
+		}
+			
+		new_board = gt.alphaBeta(_board_c, YELLOW, -40, 40, 4);
+			 		
+		for (int i = 0; i < GRID_SIZE; ++i) 
+		{
+			for (int j = 0; j < GRID_SIZE; ++j)
+			{
+				if(new_board[i][j] == YELLOW)
+				{
+					new_values.push_back(Position(i,j,new_board[i][j])); 
+				}
+			}
+	
+		}
+		// this will check if the values are the same 		
+		for(int g = 0; g<new_values.size(); g++)
+		{
+			for(int n = 0; n<old_values.size(); n++)
+			{
+				 if(new_values[g].getColum() == old_values[n].getColum() && new_values[g].getRow() == old_values[n].getRow() )
+				 { 
+				  // new move 
+				  letter = new_values[g].getColum(); 
+				  number = new_values[g].getRow();
+				  
+				 }
+			}
 		
-		string temp = ""; 
-
-		temp=convert(number,letter);
+		}
+	}
+	 
+	temp = convert(number,letter);
 	
 	std::cout<<" AI Move = "<<temp<<std::endl; 
 
-	//string new_board = "";
-	//new_board = gt.print(gt.alphaBeta(_board_c, BLACK, -50, 50, 5));
-	//Board_state nb = Board_state(new_board);
 	return temp;
 }
 
@@ -319,6 +370,7 @@ void AI::set_ai_color(std::string ai_color)
 	if(ai_color == "BLACK")
 	{
 		color = BLACK;
+		std::cout<< "this is the Ai color "<<get_color()<<std::endl;
 	
 	}
 	if(ai_color == "YELLOW")

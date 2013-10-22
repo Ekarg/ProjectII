@@ -15,6 +15,7 @@
 class AI::Board_state {
 private:
 	std::vector<std::vector<int> > board;
+	
 	int num_black;
 	int num_yellow;
 public:
@@ -45,18 +46,45 @@ unsigned int AI::compare(std::string a, std::string b) {
 }
 
 void AI::create_tree(std::string state) {
+	
 	Board_state b = Board_state(state); //TESTING
+	printf("tree created\n");
 	_board = b.get_board();
+	_board_c.resize(GRID_SIZE);
+	for (int i = 0; i < GRID_SIZE; ++i) {
+	_board_c[i].resize(GRID_SIZE);
+			for (int j = 0; j < GRID_SIZE; ++j) {
+				if(_board[i][j] == 0) {_board_c[i][j] = EMPTY;}
+				else if(_board[i][j] == 1) {_board_c[i][j] = YELLOW;}
+				else if(_board[i][j] == 2) {_board_c[i][j] = BLACK;}
+				else if(_board[i][j] == 3) {_board_c[i][j] = LEGAL_YELLOW;}
+				else if(_board[i][j] == 4) {_board_c[i][j] = LEGAL_BLACK;}
+				else if(_board[i][j] == 5) {_board_c[i][j] = LEGAL_BOTH;}
+			}
+			}
+	printf("tree enum\n");		
+	for (int i = 0; i < GRID_SIZE; ++i) {
+			for (int j = 0; j < GRID_SIZE; ++j) {
+				std::cout << _board_c[i][j];
+			}
+				std::cout << '\n';
+			}
 	//do work
 	return;
 }
 
 std::string AI::chooseHard() {
 
-	return "do work\n";
+	// std::cout << "In hard mode " << std::endl;
+	// //gt.alphaBeta(_board_c, BLACK, -50, 50, 5);
+	// string new_board = "";
+	// new_board = gt.print(gt.alphaBeta(_board_c, BLACK, -50, 50, 5));
+	// Board_state nb = Board_state(new_board);
+	return "string";
 }
 
 std::string AI::chooseMedium() {
+
 
 	return "do work\n";
 }

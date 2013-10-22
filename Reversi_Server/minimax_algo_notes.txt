@@ -1,0 +1,24 @@
+
+link to a reversi article explaining strategies 
+	http://www.samsoft.org.uk/reversi/strategy.htm#position
+
+Minimax algorithm 
+	-Root node is current board state, even depths are minimizers, while odd depths (root included) are maximizers 
+	-Once the tree is built, we must traverse the tree to the lowest depth and build the tree once more from the bottom to the root
+	-Depending whether the depth is even or odd, me must choose min or max values and choose move corresponding to the state you want 
+	 we do this until we reach the root node (orig. board state)
+	
+*Evaluation function
+	-100 to 100, where -100 means player 2 won, and 100 player 1 won
+	-99 and 99, where -99 means corner piece for player 2, 99 means corner piece for player 1 (corner pieces are favorable)
+	-Edge pieces are also favorable so we also give them a high value (~90 range)
+	-we need to come up with a function that gives values to available positions on the board (e.g this move has a value of 4 while ...this one has a value of -2)
+	-Positive values are the best outcome for player 1 (maximizer) while negative values are best for player 2 (minimizer)
+	
+*Strategy 
+	-the less pieces on the board a player has in the beginning, the better it is for that player because there will be more
+	pieces available for them to flip 
+	
+*Mobility 
+	-Choose moves that will restricts a players movement/options
+

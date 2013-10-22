@@ -13,7 +13,11 @@
 #ifndef _Gamestate_Engine_
 #define _Gamestate_Engine_
 
-#include "stdafx.h"
+#include <vector>
+#include <stack>
+#include <string>
+
+#include "global_const.h"
 
 class Gamestate_Engine {
 private:
@@ -24,8 +28,8 @@ private:
 					z = 25};
 					
 	std::vector<std::vector<State> > _board;
-	std::stack<std::vector<std::vector<State> > > played_moves; //stack of string representations of previous boards
-	std::stack<std::vector<std::vector<State> > > undid_moves; //stack of string representations of boards that have been undone
+	std::stack<std::string> played_moves; //stack of string representations of previous boards
+	std::stack<std::string> undid_moves; //stack of string representations of boards that have been undone
 
 	bool player_color;
 	bool can_play;
@@ -85,6 +89,7 @@ public:
 	// Print _board to console
 	
 	std::string get_board();
+	
 	// returns string representation of board
 	// i.e. "0 0 0 0 0 0 0 0 \n 0 0 0 0 0 0 0 0 \n  0 0 0 0 1 2 0 0 \n" ...etc.
 	// call to get data to send to client 

@@ -1,6 +1,6 @@
 #include "Game_Tree.h"
 
-void Game_Tree::initiateBoard(vector<vector<State>>& board, State c)
+void Game_Tree::initiateBoard(vector<vector<State> >& board, State c)
 {
 	removeFormerTree(root);
 
@@ -12,7 +12,7 @@ void Game_Tree::initiateBoard(vector<vector<State>>& board, State c)
 	cout << print(root->board) << endl;
 }
 
-vector<vector<State>> Game_Tree::negamax(vector<vector<State>>& board, State color, int height)
+vector<vector<State> > Game_Tree::negamax(vector<vector<State> >& board, State color, int height)
 {
 	State our_color, other_color;
 
@@ -48,7 +48,7 @@ vector<vector<State>> Game_Tree::negamax(vector<vector<State>>& board, State col
 	return temp->board;
 }
 
-vector<vector<State>> Game_Tree::alphaBeta(vector<vector<State>> & board, State color, int alpha, int beta, int height)
+vector<vector<State> > Game_Tree::alphaBeta(vector<vector<State> > & board, State color, int alpha, int beta, int height)
 {
 	State our_color, other_color;
 
@@ -106,7 +106,7 @@ void Game_Tree::findBranch(Node* n, State color)
 		{
 			if(n->board.at(i).at(j) == (State)(color + 2))
 			{
-				vector<vector<State>> cond = n->board;
+				vector<vector<State> > cond = n->board;
 				reverse(cond, color, i, j);
 				legal(cond, other_color);
 			//	cout << print(cond) << endl;
@@ -333,7 +333,7 @@ int Game_Tree::eval_tree(Node* node, int height, State color, int alpha, int bet
 	}
 }
 
-void Game_Tree::legal(vector<vector<State>>& board, State color)
+void Game_Tree::legal(vector<vector<State> >& board, State color)
 {
 	//Color settings
 	State our_color;
@@ -556,7 +556,7 @@ void Game_Tree::legal(vector<vector<State>>& board, State color)
 
 				if(done)
 					continue;
-				board.at(x).at(y) = State::EMPTY;
+				board[x][y] = EMPTY;
 			}
 		}
 	}
@@ -564,7 +564,7 @@ void Game_Tree::legal(vector<vector<State>>& board, State color)
 	return ;
 }
 
-void Game_Tree::reverse(vector<vector<State>>& board, State color, int x, int y)
+void Game_Tree::reverse(vector<vector<State> >& board, State color, int x, int y)
 {
 	//directoin
 	int a, b;
@@ -730,7 +730,7 @@ void Game_Tree::reverse(vector<vector<State>>& board, State color, int x, int y)
 
 }
 
-void Game_Tree::reverse_one_direction(vector<vector<State>>& board, State color, int x, int y, int a, int b)
+void Game_Tree::reverse_one_direction(vector<vector<State> >& board, State color, int x, int y, int a, int b)
 {
 	State our_color, other_color;
 	if(color == YELLOW)
@@ -758,7 +758,7 @@ void Game_Tree::reverse_one_direction(vector<vector<State>>& board, State color,
 	}
 }
 
-string Game_Tree::print(vector<vector<State>> board)
+string Game_Tree::print(vector<vector<State> > board)
 {
 	string s;
 

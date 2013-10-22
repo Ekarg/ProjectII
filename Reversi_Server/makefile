@@ -27,20 +27,23 @@ game_state_engine.o: game_state_engine.h Position.h game_state_engine.cpp
 gse_test: gse_test.cpp game_state_engine.o
 	$(CC) -o gse_test gse_test.cpp game_state_engine.o
 	
+Game_Tree.o: Game_Tree.h Game_Tree.cpp
+	$(CC) -c -g Game_Tree.cpp
+	
 ai.o: ai.h ai.cpp
 	$(CC) -c -g ai.cpp
 	
-gai_test: gai_test.cpp ai.o
-	$(CC) -o gai_test gai_test.cpp ai.o	
+gai_test: gai_test.cpp ai.o Game_Tree.o
+	$(CC) -o gai_test gai_test.cpp ai.o	Game_Tree.o
 	
 game_server.o: game_server.h game_server.cpp
 	$(CC) -c -g game_server.cpp -lsocket -lnsl
 
-gserv_test: gserv_test.cpp game_server.o ai.o game_state_engine.o
-	$(CC) -o gserv_test gserv_test.cpp game_server.o ai.o game_state_engine.o -lsocket -lnsl
+gserv_test: gserv_test.cpp game_server.o ai.o game_state_engine.o Game_Tree.o 
+	$(CC) -o gserv_test gserv_test.cpp game_server.o ai.o  Game_Tree.o game_state_engine.o -lsocket -lnsl
 
-main: main.cpp game_server.o game_state_engine.o ai.o 
-	$(CC) -o main main.cpp game_server.o game_state_engine.o ai.o -lsocket -lnsl
+main: main.cpp game_server.o game_state_engine.o ai.o Game_Tree.o
+	$(CC) -o main main.cpp game_server.o game_state_engine.o ai.o Game_Tree.o -lsocket -lnsl
 	
 clean:
 	/bin/rm -rf *.o gse_test

@@ -19,8 +19,6 @@ const unsigned int PORT = 4001;
 
 enum State { EMPTY = 0, YELLOW = 1, BLACK = 2, LEGAL_YELLOW = 3, LEGAL_BLACK = 4, LEGAL_BOTH = 5};
 
-
-
 #endif
 
 

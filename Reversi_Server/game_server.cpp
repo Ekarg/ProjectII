@@ -22,7 +22,7 @@ bool default_case = false;
 
 void Game_Server::Default_Setup() //didn't init game type (HUMAN-AI/AI-AI) because it does nothing as of now
 {
-	unsigned int easy = 2;
+	unsigned int easy = 7;
 	setup_ai(easy);
 	_e.set_color("YELLOW"); //user is always yellow
 	_ai.set_ai_color("BLACK");//ai is always black 

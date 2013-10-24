@@ -177,6 +177,14 @@ void gui_keyboard(unsigned char key, int x, int y) {
 		//SEND COMMAND TO BACKEND
 		type_text.clear();
 		break;
+	case '~':
+		if (isSplash) {
+			isSplash = false;
+		}
+		else {
+			isSplash = true;
+		}
+		break;
 	default:
 		if (type_text.size() > TEXT_BUFF_SIZE) {
 			return;

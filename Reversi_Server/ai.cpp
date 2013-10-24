@@ -62,19 +62,20 @@ void AI::create_tree(std::string state) {
 	printf("tree created\n");
 	_board = b.get_board();
 	_board_c.resize(GRID_SIZE);
+	
 	for (int i = 0; i < GRID_SIZE; ++i) 
 	{
 		_board_c[i].resize(GRID_SIZE);
-				for (int j = 0; j < GRID_SIZE; ++j) 
-				{
-					if(_board[i][j] == 0) {_board_c[i][j] = EMPTY;}
-					else if(_board[i][j] == 1) {_board_c[i][j] = YELLOW;}
-					else if(_board[i][j] == 2) {_board_c[i][j] = BLACK;}
-					else if(_board[i][j] == 3) {_board_c[i][j] = LEGAL_YELLOW;}
-					else if(_board[i][j] == 4) {_board_c[i][j] = LEGAL_BLACK;}
-					else if(_board[i][j] == 5) {_board_c[i][j] = LEGAL_BOTH;}
-				}
-		}
+			for (int j = 0; j < GRID_SIZE; ++j) 
+			{
+				if(_board[i][j] == 0) {_board_c[i][j] = EMPTY;}
+				else if(_board[i][j] == 1) {_board_c[i][j] = YELLOW;}
+				else if(_board[i][j] == 2) {_board_c[i][j] = BLACK;}
+				else if(_board[i][j] == 3) {_board_c[i][j] = LEGAL_YELLOW;}
+				else if(_board[i][j] == 4) {_board_c[i][j] = LEGAL_BLACK;}
+				else if(_board[i][j] == 5) {_board_c[i][j] = LEGAL_BOTH;}
+			}
+	}
 	
 	//do work
 	return;
@@ -101,7 +102,7 @@ std::string AI::chooseHard() {
 		{
 			for (int j = 0; j < GRID_SIZE; ++j) 
 			{
-				if(_board_c[i][j] == LEGAL_BLACK)
+				if(_board_c[i][j] == LEGAL_BLACK || _board_c[i][j] == LEGAL_BOTH)
 				{
 					old_values.push_back(Position(i,j,_board_c[i][j])); 
 				}
@@ -144,7 +145,7 @@ std::string AI::chooseHard() {
 		{
 			for (int j = 0; j < GRID_SIZE; ++j) 
 			{
-				if(_board_c[i][j] == LEGAL_YELLOW)
+				if(_board_c[i][j] == LEGAL_YELLOW || _board_c[i][j] == LEGAL_BOTH)
 				{
 					old_values.push_back(Position(i,j,_board_c[i][j])); 
 				}
@@ -179,10 +180,9 @@ std::string AI::chooseHard() {
 			}
 		
 		}
+
 	}
 	 
-	temp = convert(number,letter);
-	
 	std::cout<<" AI Move = "<<temp<<std::endl; 
 
 	return temp;
@@ -203,13 +203,13 @@ if(get_color() == 2) // ai is black
 		{
 			for (int j = 0; j < GRID_SIZE; ++j) 
 			{
-				if(_board_c[i][j] == LEGAL_BLACK)
+				if(_board_c[i][j] == LEGAL_BLACK || _board_c[i][j] == LEGAL_BOTH)
 				{
 					old_values.push_back(Position(i,j,_board_c[i][j])); 
 				}
 			}
 		}
-			
+		
 		new_board = gt.alphaBeta(_board_c, BLACK, -40, 40, 4);
 			 		
 		for (int i = 0; i < GRID_SIZE; ++i) 
@@ -223,30 +223,29 @@ if(get_color() == 2) // ai is black
 			}
 	
 		}
+
 		// this will check if the values are the same 		
-		for(int g = 0; g<new_values.size(); g++)
+		for(int g = 0; g < new_values.size(); g++)
 		{
-			for(int n = 0; n<old_values.size(); n++)
+			for(int n = 0; n < old_values.size(); n++)
 			{
 				 if(new_values[g].getColum() == old_values[n].getColum() && new_values[g].getRow() == old_values[n].getRow() )
 				 { 
-				  // new move 
-				  letter = new_values[g].getColum(); 
-				  number = new_values[g].getRow();
-				  
-				 }
+					  // new move 
+					  letter = new_values[g].getColum(); 
+					  number = new_values[g].getRow();
+				  }
 			}
-		
 		}
 	}
 	
-	if(get_color() == 1) // ai is yellow
+	else if(get_color() == 1) // ai is yellow
 	{
 		for (int i = 0; i < GRID_SIZE; ++i) 
 		{
 			for (int j = 0; j < GRID_SIZE; ++j) 
 			{
-				if(_board_c[i][j] == LEGAL_YELLOW)
+				if(_board_c[i][j] == LEGAL_YELLOW ||_board_c[i][j] == LEGAL_BOTH)
 				{
 					old_values.push_back(Position(i,j,_board_c[i][j])); 
 				}
@@ -282,7 +281,8 @@ if(get_color() == 2) // ai is black
 		
 		}
 	}
-	 
+	
+	temp = ""; 
 	temp = convert(number,letter);
 	
 	std::cout<<" AI Move = "<<temp<<std::endl; 

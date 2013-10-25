@@ -247,6 +247,9 @@ void gui_mouse(int button, int state, int x, int y) {
 		exit(0);
 	}
 	if (button == GLUT_LEFT_BUTTON) {
+		if (isSplash) {
+			isSplash = false;
+		}
 		//send move based on coordinates
 		GLfloat scaled_x = ((float)x/WINDOW_WIDTH)* GRID_SIZE;
 		GLfloat scaled_y = ((float)y/WINDOW_HEIGHT)* GRID_SIZE;

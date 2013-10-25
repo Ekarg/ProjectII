@@ -21,13 +21,17 @@
 #include <sys/types.h> 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "game_state_engine.h"
 
 
 class Game_Client {
 private:
-
+	Gamestate_Engine _e;
 
 public:
+
+	
+	Game_Client();
 	
 	bool send_cmd(std::string s);
 	// Takes in the user command and sends it to the server	
@@ -42,7 +46,6 @@ public:
 	
 	void run_gui();
 	//runs gui
-	
 };
 
 #endif

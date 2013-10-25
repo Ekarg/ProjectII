@@ -13,6 +13,14 @@
 
 #include "game_client.h"
 
+/*
+send(move)
+engine.move(move)
+ai_move = receive() 
+engine.move(ai_move)
+
+
+*/
 
 void gui_run();
 void gui_render_grid();
@@ -21,6 +29,11 @@ void gui_keyboard(unsigned char c, int x, int y);
 void gui_mouse(int button, int state, int x, int y);
 
 std::vector<char> type_text;
+
+Game_Client::Game_Client() {
+	_e = Gamestate_Engine();
+}
+
 
 
 bool Game_Client::set_up_connection(int port) {
@@ -82,7 +95,7 @@ int const ASCII_BACKSPACE = 8;
 int const ASCII_ENTER = 13;
 int const ASCII_ESC = 27;
 
-int const GRID_SIZE = 8;
+//int const GRID_SIZE = 8;
 int const TEXT_BUFF_SIZE = 64;
 
 bool isSplash = true;

@@ -19,6 +19,10 @@ int main(int argc, char* argv[])
 	//if exit command is processed by game_client, break from while loop
 	
 	Game_Client _gc;
+	std::cout<<"Please enter port number.\n";
+	int port;
+	std::cin>>port;
+	_gc.set_up_connection(port);
 	_gc.run_gui();
 	return 0;
 

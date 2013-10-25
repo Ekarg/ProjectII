@@ -34,7 +34,7 @@ public:
 	// The response from the server is printed out in this function to the main screen
 	// The return value specifies if the game has ended and the connection should be termintated
 	
-	bool connect(int port);
+	bool set_up_connection(int port);
 	// Takes the port number entered by the user and attempts to connect. 	
 	
 	bool disconnect();

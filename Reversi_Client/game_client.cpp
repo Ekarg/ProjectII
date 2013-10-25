@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -8,6 +9,7 @@
 #include <GL/glut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+
 
 #include "game_client.h"
 
@@ -52,6 +54,22 @@ bool Game_Client::set_up_connection(int port) {
 void Game_Client::run_gui() {
 	gui_run();
 }
+
+std::string convert(int x, int y)
+ {
+ std::string s = ""; 
+	std::stringstream ss;
+	ss << y;
+	ss >> s;
+	s += (char)(x+97);
+	char a = s[0];
+	s[0] = s[1];
+	s[1] = a;
+	//Quick and dirty: Never ever ever ever do this.
+	//Quick and dirty: Never ever ever ever do this.
+	return s;
+}
+
 
 //GUI STUFF
 
@@ -224,17 +242,21 @@ void gui_keyboard(unsigned char key, int x, int y) {
 		break;
 	}
 }
-
 void gui_mouse(int button, int state, int x, int y) {
 	if (button == GLUT_RIGHT_BUTTON) {
 		exit(0);
 	}
 	if (button == GLUT_LEFT_BUTTON) {
-		//on first click, close splash screen
-		if (isSplash) { isSplash = false; }
 		//send move based on coordinates
 		GLfloat scaled_x = ((float)x/WINDOW_WIDTH)* GRID_SIZE;
 		GLfloat scaled_y = ((float)y/WINDOW_HEIGHT)* GRID_SIZE;
-		std::cout << scaled_y <<"     " << scaled_x << '\n';
+		//std::cout << scaled_y <<"     " << scaled_x << '\n';
+		int new_y = (int)scaled_y;
+		int new_x = (int)scaled_x;
+		std::cout << new_y <<"     " << new_x << '\n';
+		std::string move = convert(new_x,new_y);
+		std::cout << move << std::endl;
+		
+		
 	}
 }

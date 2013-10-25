@@ -20,7 +20,7 @@ game_client.o: game_client.h game_client.cpp
 	$(CC) -c -g game_client.cpp
 
 client_main: main.cpp game_client.o
-	$(CC) -o main main.cpp game_client.o -lglut -lGL -lGLU -lX11 -lXmu -lXi -lm
+	$(CC) -o main main.cpp game_client.o -lglut -lGL -lGLU -lX11 -lXmu -lXi -lm -lsocket -lnsl
 	
 clean:
 	/bin/rm -rf *.o client_main

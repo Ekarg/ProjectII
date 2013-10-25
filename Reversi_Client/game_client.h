@@ -12,7 +12,16 @@
 #ifndef _GAME_CLIENT_
 #define _GAME_CLIENT_
 
+
 #include <string>
+#include <stdio.h>
+#include <iostream>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h> 
+#include <sys/socket.h>
+#include <netinet/in.h>
+
 
 class Game_Client {
 private:

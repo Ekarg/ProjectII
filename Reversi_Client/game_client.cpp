@@ -20,6 +20,35 @@ void gui_mouse(int button, int state, int x, int y);
 
 std::vector<char> type_text;
 
+
+bool Game_Client::set_up_connection(int port) {
+	//int port = PORT;
+	std::cout<<"Connecting on port ... "<<port<<std::endl;
+	int sockID;
+	 socklen_t clilen;
+     char buffer[256];
+     struct sockaddr_in serv_addr;
+	 struct sockaddr *addrPtr;
+     unsigned int n = 100;
+	 int connectID;
+	 if( (sockID = socket(AF_INET, SOCK_STREAM, 0)) <0 ) {
+		printf("Error creating socket\n");
+		return false;
+	 }
+	 serv_addr.sin_family = AF_INET;
+	 std::string ip_s = "127.0.0.1";
+	 
+	 serv_addr.sin_port = htons(port);  
+	 serv_addr.sin_addr.s_addr = INADDR_ANY;
+	 sockaddr &addr =(sockaddr &)serv_addr;
+	 if( connect(sockID, &addr, sizeof(serv_addr)) < -1) {
+		printf("Error connecting\n");
+		return false; 
+	 }
+	std::cout<<"Connected ... Time to play!\n";
+	return true;
+}
+
 void Game_Client::run_gui() {
 	gui_run();
 }

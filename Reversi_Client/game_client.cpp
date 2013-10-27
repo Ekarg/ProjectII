@@ -39,7 +39,7 @@ Game_Client::Game_Client() {
 bool Game_Client::set_up_connection(int port) {
 	//int port = PORT;
 	std::cout<<"Connecting on port ... "<<port<<std::endl;
-	int sockID;
+	sockID;
 	 socklen_t clilen;
      char buffer[256];
      struct sockaddr_in serv_addr;
@@ -66,6 +66,29 @@ bool Game_Client::set_up_connection(int port) {
 
 void Game_Client::run_gui() {
 	gui_run();
+}
+
+bool Game_Client::send_message(std::string message) {
+	if( send(sockID, message.c_str(), message.length(), 0) < 0) {
+		printf("Error sending.\n");
+		return false;	
+	}
+	return true;
+}
+
+std::string Game_Client::receive_message() {
+	char * buf = new char[500];
+	int length = recv(sockID, buf, 500, 0);
+	if(length <= 0) {
+		printf("No message received from server.\n");
+		delete buf;
+		return " ";
+	}
+	else {
+		std::string message = std::string(buf, length);
+		delete buf;
+		return message;
+	}
 }
 
 std::string convert(int x, int y)

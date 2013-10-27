@@ -27,7 +27,7 @@
 class Game_Client {
 private:
 	Gamestate_Engine _e;
-
+	int sockID;
 public:
 
 	
@@ -46,6 +46,12 @@ public:
 	
 	void run_gui();
 	//runs gui
+	
+	bool send_message(std::string message); 
+	//send message to server 
+	
+	std::string receive_message();
+	//receive message from server
 };
 
 #endif

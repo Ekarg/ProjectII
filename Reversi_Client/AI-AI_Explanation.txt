@@ -1,0 +1,5 @@
+Start client
+Client says play as AI-AI on different port
+AI goes connect as AI on the new port
+AI tells opponent server to play as HUMAN-AI, what color, and what difficulty
+As they play, the result is pushed to the client 

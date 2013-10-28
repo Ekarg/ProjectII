@@ -17,21 +17,58 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <sys/types.h> 
-#include <sys/socket.h>
-#include <netinet/in.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
 #include "game_state_engine.h"
 
+#include <glew.h>
+#include <GL.H>
+#include <freeglut.h>
+
+using namespace std;
+
+struct Position
+{
+	int x;
+	int y;
+};
+struct Piece
+{
+	Position pos;
+	bool is_hovered;
+	bool is_updated;
+	State my_state;
+};
 
 class Game_Client {
 private:
 	Gamestate_Engine _e;
 	int sockID;
+
+	//for drawing purpose
+	//vector<vector<Piece>> myboard;
+	State player_color;
+
+	//openGL drawing functions
 public:
 
 	
 	Game_Client();
+	//yea, I know its a bad design to expose it to public. just for convenient
+	vector<vector<Piece>> myboard;
+
+	vector<vector<Piece>> getBoard() {return myboard; }
+	Piece getPiece(int x, int y)  {return myboard.at(x).at(y); }
+	State getColor() {return player_color;}
+	
+	void setBoard(vector<vector<Piece>>& b) {myboard = b; }
+	void setBoard(int x, int y, Piece p) {myboard.at(x).at(y) = p; }
+
+	void update(int x, int y); // for update board purpose
+
+	//damn! openGL can't accept member functions as its parameters!  
 	
 	bool send_cmd(std::string s);
 	// Takes in the user command and sends it to the server	
@@ -44,8 +81,6 @@ public:
 	bool disconnect();
 	// Close socket connection
 	
-	void run_gui();
-	//runs gui
 	
 	bool send_message(std::string message); 
 	//send message to server 

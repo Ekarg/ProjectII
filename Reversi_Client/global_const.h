@@ -14,7 +14,15 @@
 
 #define OUT_OF_RANGE  32767
 
+#define WINDOWWIDTH 480
+#define WINDOWLENGTH 640
+
 const int GRID_SIZE = 8;
+
+//for openGL 
+#define GRID_WIDTH 1
+#define GRID_LENGTH 1
+
 const unsigned int PORT = 4001;
 
 enum State { EMPTY = 0, YELLOW = 1, BLACK = 2, LEGAL_YELLOW = 3, LEGAL_BLACK = 4, LEGAL_BOTH = 5};

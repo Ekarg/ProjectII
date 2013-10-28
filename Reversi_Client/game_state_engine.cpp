@@ -19,9 +19,9 @@
 #include <stdlib.h>
 #include <sstream>
 #include "game_state_engine.h"
-#include "Position.h"
 #include <vector>
 #include <time.h> 
+
 Gamestate_Engine::Gamestate_Engine() {
 	_board.resize(GRID_SIZE);
 	for (int i = 0; i < GRID_SIZE; ++i) {

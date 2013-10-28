@@ -16,10 +16,12 @@
 
 bool colorSet = false; //checks if user has already entered a color
 bool AI_Set = false; //checks if users has already entered game type
+bool Human = false;
+bool Ai = false;
 bool AI_diff_Set = false; //checks if user has already entered a difficulty
 bool display = false; //checks if user has entered display command
 bool default_case = false;
-
+bool ai_connection = false;
 void Game_Server::Default_Setup() //didn't init game type (HUMAN-AI/AI-AI) because it does nothing as of now
 {
 	unsigned int easy = 4;
@@ -51,7 +53,6 @@ void Game_Server::run() {
      struct sockaddr_in serv_addr;
 	 struct sockaddr *addr;
      unsigned int n = 100;
-	 int connectID;
 	 if( (sockID = socket(AF_INET, SOCK_STREAM, 0)) <0 ) {
 		printf("Error creating socket\n");
 		return;
@@ -68,7 +69,8 @@ void Game_Server::run() {
 		printf("Error while listening");
 		return;
 	}
-	connectID = accept(sockID, addr, &n);
+	int connectID = accept(sockID, addr, &n);
+	printf("!!\n");
 	std::string welcome = "WELCOME\n";
 	if( send(connectID, welcome.c_str(), welcome.length(), 0) < 0) {
 		printf("Error sending.\n");
@@ -76,7 +78,11 @@ void Game_Server::run() {
 	}
 	while(true) {
 		char * buf = new char[500];
-		int length = recv(connectID, buf, 500, 0);
+		int length =0;
+		if(!ai_connection) // talk to the client
+			length = recv(connectID, buf, 500, 0);
+		else // talk to the ai server, ignore client
+			length = recv(aiID, buf, 500, 0);
 		if(length < 0) {
 			printf("Error receiving message.\n");
 			delete buf;
@@ -86,11 +92,17 @@ void Game_Server::run() {
 			std::string message = std::string(buf, length);
 			int response_num = parse_cmd(message);
 			std::string response = reply(response_num);
-			if( send(connectID, response.c_str(), response.length(), 0) < 0){
-				printf("Error sending.\n");
-				delete buf;
-				break;		
-			} 
+			if(ai_connection) // talt to the client
+				if( send(aiID, response.c_str(), response.length(), 0) < 0){
+					printf("Error sending.\n");
+					delete buf;
+					break;		
+				} 
+		   if(send(connectID, response.c_str(), response.length(), 0) < 0){
+					printf("Error sending.\n");
+					delete buf;
+					break;		
+				} 			
 			if(message.find("EXIT") != std::string::npos) {
 				delete buf;
 				break;
@@ -103,6 +115,14 @@ void Game_Server::run() {
 		return;
 	}
 	if( close(connectID) < 0) {
+		printf("Error closing connection.\n");
+		return;
+	}
+	if( shutdown(aiID, 2) < 0)  {
+		printf("Error shutting down connection.\n");
+		return;
+	}
+	if( close(aiID) < 0) {
 		printf("Error closing connection.\n");
 		return;
 	}
@@ -170,8 +190,8 @@ unsigned int Game_Server::parse_cmd(std::string s){
 	else if(s == "YELLOW" && !colorSet) { default_case = true; colorSet = true; _e.set_color("YELLOW"); _ai.set_ai_color("BLACK");} 
 	
 	// //STEP 2) set game type, AI_Set is a restriction if the user tries to enter a gametype query again or not set colors skip this statement  
-	else if(s == "AI-AI" && colorSet && default_case && !AI_Set) { AI_Set = true; }
-	else if(s == "HUMAN-AI" &&colorSet && default_case && !AI_Set) {AI_Set = true;}
+	else if(s == "AI-AI" && colorSet && default_case && !AI_Set) { AI_Set = true; Ai = true; set_up_AI_connection(); }
+	else if(s == "HUMAN-AI" &&colorSet && default_case && !AI_Set) {AI_Set = true; Human = true;}
 	
 	// //STEP 3) set difficulty, AI_diff_set is a restriction if the user tries to enter a diff. again or has not entered color or game type skip this statement  
 	else if(s == "HARD" && !AI_diff_Set && colorSet && default_case && AI_Set) { AI_diff_Set = true; unsigned int hard = 7; setup_ai(hard) ;}
@@ -238,6 +258,34 @@ void Game_Server::ai_play() {
 		_e.set_color("YELLOW");
 }
 
+void Game_Server::set_up_AI_connection() {
+	std::cout<<"Enter port number.\n"<<std::endl;
+	int port;
+	std::cin >> port;
+	std::cout<<"Enter IP address in decimal form.\n"<<std::endl;
+	std::string ip;
+	std::cin >> ip;
+     socklen_t clilen;
+     char buffer[256];
+     struct sockaddr_in serv_addr;
+	 struct sockaddr *addrPtr;
+     unsigned int n = 100;
+	 if( (aiID = socket(AF_INET, SOCK_STREAM, 0)) <0 ) {
+		printf("Error creating socket\n");
+		return;
+	 }
+	 serv_addr.sin_family = AF_INET;
+
+	 serv_addr.sin_port = htons(port);  
+	 serv_addr.sin_addr.s_addr = inet_addr(ip.c_str());
+	 sockaddr &addr =(sockaddr &)serv_addr;
+	 if( connect(aiID, &addr, sizeof(serv_addr)) < -1) {
+		printf("Error connecting\n");
+		return; 
+	 }
+	ai_connection = true;	
+
+}
 
 
 

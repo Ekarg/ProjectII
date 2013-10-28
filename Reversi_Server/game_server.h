@@ -24,6 +24,7 @@
 #include <sys/types.h> 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 
 class Game_Server {
 private:
@@ -36,6 +37,9 @@ private:
 	// AI that should be used with the Gamestate_Engine _e in 
 	// the event that the user plays against AI.
 
+	int clientID;
+	
+	int aiID;
 public:
 	Game_Server();
 	// Default Constructor sets up initial conditions
@@ -81,6 +85,10 @@ public:
 	
 	void exit();
 	// Obvious.
+	
+	void set_up_AI_connection();
+	
+	
 	void Default_Setup();
 	//default game 
 
